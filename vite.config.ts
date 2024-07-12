@@ -4,7 +4,7 @@ import svgr from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(),svgr()],
+  plugins: [react(), svgr()],
   resolve: {
     alias: {
       "@": "/src",
@@ -15,4 +15,17 @@ export default defineConfig({
       "@types": "/src/type.d.ts",
     },
   },
+  // build: {
+  //   rollupOptions: {
+  //     output: {
+  //       manualChunks: {
+  //         // Split vendor code into separate chunks
+  //         "react-vendor": ["react", "react-dom"],
+  //         "leaflet-vendor": ["leaflet"],
+  //         // Add more entries if needed
+  //       },
+  //     },
+  //   },
+  //   // chunkSizeWarningLimit: 600, // Adjust this as needed
+  // },
 });

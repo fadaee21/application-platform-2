@@ -1,13 +1,14 @@
 // src/components/UserAddress.tsx
 import { PrimaryButtons } from "@/components/ui-kit/buttons/PrimaryButtons";
-import MapComponent from "./MapRegUser";
 import { toast } from "react-toastify";
 import axiosPrivate from "@/services/axios";
 import { KeyedMutator } from "swr";
 import ModalSKeleton from "@/components/ui-kit/ModalSkeleton";
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
 import ModalWarningContent from "@/components/ui-kit/ModalWarningContent";
 import AddEditAddress from "./AddEditAddress";
+import { LoadingSpinnerButton } from "@/components/ui-kit/LoadingSpinner";
+const MapRegUser = lazy(() => import("./MapRegUser"));
 
 interface IProps {
   address: IAddressUser;
@@ -70,7 +71,9 @@ const UserAddress = ({ address, mutate, accountId }: IProps) => {
           </div>
         </div>
         <div className="z-0 order-1 w-full px-1 h-60 md:w-1/2 md:h-full md:order-2">
-          <MapComponent lat={lat} lng={lng} disabled={true} />
+          <Suspense fallback={<LoadingSpinnerButton />}>
+            <MapRegUser lat={lat} lng={lng} disabled={true} />
+          </Suspense>
         </div>
       </div>
       <ModalSKeleton

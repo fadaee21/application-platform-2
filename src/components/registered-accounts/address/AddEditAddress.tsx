@@ -1,10 +1,11 @@
-import { useState } from "react";
-import MapRegUser from "./MapRegUser";
+import { Suspense, lazy, useState } from "react";
 import { TextField } from "@/components/login/TextField";
 import axiosPrivate from "@/services/axios";
 import { PrimaryButtons } from "@/components/ui-kit/buttons/PrimaryButtons";
 import { toast } from "react-toastify";
 import { KeyedMutator } from "swr";
+import { LoadingSpinnerButton } from "@/components/ui-kit/LoadingSpinner";
+const MapRegUser = lazy(() => import("./MapRegUser"));
 interface IProps {
   accountId?: string;
   mutate: KeyedMutator<ResponseDataNoPagination<IAddressUser>>;
@@ -111,12 +112,14 @@ const AddEditAddress = ({
           />
         </div>
         <div className="w-full size-60 md:size-96">
-          <MapRegUser
-            disabled={!isMapEditing}
-            setMyPosition={setPosition}
-            lat={Number(lat)}
-            lng={Number(lng)}
-          />
+          <Suspense fallback={<LoadingSpinnerButton/>}>
+            <MapRegUser
+              disabled={!isMapEditing}
+              setMyPosition={setPosition}
+              lat={Number(lat)}
+              lng={Number(lng)}
+            />
+          </Suspense>
         </div>
       </div>
       <div className="flex flex-col items-center justify-between w-full space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
