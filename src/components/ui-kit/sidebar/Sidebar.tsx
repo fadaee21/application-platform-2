@@ -51,6 +51,8 @@ function Sidebar({ children }: TChildren) {
                 name: "تنظیمات",
                 href: "/settings",
                 icon: Settings,
+                role:"",
+                id: "settings",
               }}
               setOpen={setOpen}
             />

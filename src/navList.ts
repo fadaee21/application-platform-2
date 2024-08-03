@@ -2,14 +2,17 @@ import Dashboard from "@/assets/icons/dashboard.svg?react";
 import Team from "@/assets/icons/team.svg?react";
 import Adjustment from "@/assets/icons/adjustments-horizontal.svg?react";
 import Photo from "@/assets/icons/photo.svg?react";
+import ShoppingBag from "@/assets/icons/shopping-bag.svg?react";
 // import Projects from "@/assets/icons/projects.svg?react";
 // import Calendar from "@/assets/icons/calendar.svg?react";
 // import Document from "@/assets/icons/document.svg?react";
 // import Reports from "@/assets/icons/reports.svg?react";
 
+
+
 // 1:SUPERUSER
 // 2:user
-const navList = [
+const navList: INavItem[] = [
   {
     id: "1a",
     name: "داشبورد",
@@ -17,6 +20,42 @@ const navList = [
     index: true,
     icon: Dashboard,
     role: "SUPERUSER",
+  },
+  {
+    id: "5a",
+    name: "محصولات",
+    icon: ShoppingBag,
+    role: "SUPERUSER",
+    children: [
+      {
+        id: "5a-1",
+        name: "پروژه‌ها",
+        href: "/superuser/projects",
+        // icon: Projects,
+        role: "SUPERUSER",
+      },
+      {
+        id: "5a-2",
+        name: "تقویم",
+        href: "/superuser/calendar",
+        // icon: Calendar,
+        role: "SUPERUSER",
+      },
+      {
+        id: "5a-3",
+        name: "گزارش‌ها",
+        href: "/superuser/report",
+        // icon: Reports,
+        role: "SUPERUSER",
+      },
+      {
+        id: "5a-4",
+        name: "اسناد",
+        href: "/superuser/document",
+        // icon: Document,
+        role: "SUPERUSER",
+      },
+    ],
   },
   {
     id: "2a",
@@ -39,6 +78,7 @@ const navList = [
     icon: Adjustment,
     role: "SUPERUSER",
   },
+
   {
     id: "1u",
     name: "تست-پروژه",
@@ -47,31 +87,6 @@ const navList = [
     icon: Dashboard,
     role: "USER",
   },
-  // {
-  //   id: "3a",
-  //   name: "پروژه‌ها",
-  //   href: "/superuser/projects",
-  //   icon: Projects,
-  //   role: "SUPERUSER",
-  // },
-  //   {
-  //     id: 4,
-  //     name: "تقویم",
-  //     href: "/SUPERUSER/calendar",
-  //     icon: Calendar,
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "گزارش‌ها",
-  //     href: "/SUPERUSER/report",
-  //     icon: Reports,
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "اسناد",
-  //     href: "/SUPERUSER/document",
-  //     icon: Document,
-  //   },
 ];
 
 export default navList;

@@ -1,5 +1,16 @@
 type Role = "SUPERUSER" | "ADMIN" | "USER";
 
+
+interface INavItem {
+  id: string;
+  name: string;
+  href?: string;
+  index?: boolean;
+  icon?: FunctionComponent<SVGProps<SVGSVGElement> & { title?: string }>;
+  role: string;
+  children?: INavItem[];
+}
+
 interface SelectedOption {
   value: string;
   label: string;
@@ -157,4 +168,21 @@ interface MyJwtPayload extends JwtPayload {
   email: string | null;
   mobile: string | null;
   roles: Role[];
+}
+
+interface INeshan {
+  status: string;
+  neighbourhood: string;
+  municipality_zone: string;
+  state: string;
+  city: string;
+  in_traffic_zone: boolean;
+  in_odd_even_zone: boolean;
+  route_name: string;
+  route_type: string;
+  place: string;
+  district: string;
+  formatted_address: string;
+  village: unknown;
+  county: string;
 }

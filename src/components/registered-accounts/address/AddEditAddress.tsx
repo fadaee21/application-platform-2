@@ -5,6 +5,7 @@ import { PrimaryButtons } from "@/components/ui-kit/buttons/PrimaryButtons";
 import { toast } from "react-toastify";
 import { KeyedMutator } from "swr";
 import { LoadingSpinnerButton } from "@/components/ui-kit/LoadingSpinner";
+import useReverseGeocoding from "@/hooks/useReverseGeocoding";
 const MapRegUser = lazy(() => import("./MapRegUser"));
 interface IProps {
   accountId?: string;
@@ -68,6 +69,11 @@ const AddEditAddress = ({
       toast.error("مشکلی پیش آمد، دوباره تلاش کنید");
     }
   };
+
+  const { addressData } = useReverseGeocoding(Number(lat), Number(lng));
+
+  console.log(addressData);
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -112,7 +118,7 @@ const AddEditAddress = ({
           />
         </div>
         <div className="w-full size-60 md:size-96">
-          <Suspense fallback={<LoadingSpinnerButton/>}>
+          <Suspense fallback={<LoadingSpinnerButton />}>
             <MapRegUser
               disabled={!isMapEditing}
               setMyPosition={setPosition}
