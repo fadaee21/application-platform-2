@@ -17,10 +17,11 @@ import Test from "./pages/test";
 import { Address } from "./pages/registered-account/Address";
 import Product from "./pages/product/Product";
 import Tags from "./pages/product/Tags";
-import Categories from "./pages/product/Categories";
+import Categories from "./pages/product/category/Categories";
 import Stock from "./pages/product/Stock";
 import Additions from "./pages/product/Additions";
 import AdditionsStock from "./pages/product/AdditionsStock";
+import AddCategory from "./pages/product/category/AddCategory";
 
 const router = createBrowserRouter([
   {
@@ -93,7 +94,16 @@ const router = createBrowserRouter([
                   },
                   {
                     path: "categories",
-                    element: <Categories />,
+                    children: [
+                      {
+                        index: true,
+                        element: <Categories />,
+                      },
+                      {
+                        path: "add",
+                        element: <AddCategory />,
+                      }
+                    ],
                   },
                   {
                     path: "stock",
