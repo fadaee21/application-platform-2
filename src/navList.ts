@@ -8,8 +8,6 @@ import ShoppingBag from "@/assets/icons/shopping-bag.svg?react";
 // import Document from "@/assets/icons/document.svg?react";
 // import Reports from "@/assets/icons/reports.svg?react";
 
-
-
 // 1:SUPERUSER
 // 2:user
 const navList: INavItem[] = [
@@ -23,36 +21,44 @@ const navList: INavItem[] = [
   },
   {
     id: "5a",
-    name: "محصولات",
+    name: "محصول ها",
     icon: ShoppingBag,
     role: "SUPERUSER",
     children: [
       {
         id: "5a-1",
-        name: "پروژه‌ها",
-        href: "/superuser/projects",
-        // icon: Projects,
+        name: "محصول ها",
+        href: "superuser/product",
         role: "SUPERUSER",
       },
       {
         id: "5a-2",
-        name: "تقویم",
-        href: "/superuser/calendar",
-        // icon: Calendar,
+        name: "برچسب ها",
+        href: "superuser/product/tags",
         role: "SUPERUSER",
       },
       {
         id: "5a-3",
-        name: "گزارش‌ها",
-        href: "/superuser/report",
-        // icon: Reports,
+        name: "دسته بندی ها",
+        href: "superuser/product/categories",
         role: "SUPERUSER",
       },
       {
         id: "5a-4",
-        name: "اسناد",
-        href: "/superuser/document",
-        // icon: Document,
+        name: "موجودی محصول ها",
+        href: "superuser/product/stock",
+        role: "SUPERUSER",
+      },
+      {
+        id: "5a-5",
+        name: "افزودنی ها",
+        href: "superuser/product/additions",
+        role: "SUPERUSER",
+      },
+      {
+        id: "5a-6",
+        name: "موجودی افزودنی ها",
+        href: "superuser/product/additions-stock",
         role: "SUPERUSER",
       },
     ],

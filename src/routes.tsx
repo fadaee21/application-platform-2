@@ -15,6 +15,12 @@ import BannerId from "./pages/banner/BannerId";
 import CreateBanner from "./pages/banner/CreateBanner";
 import Test from "./pages/test";
 import { Address } from "./pages/registered-account/Address";
+import Product from "./pages/product/Product";
+import Tags from "./pages/product/Tags";
+import Categories from "./pages/product/Categories";
+import Stock from "./pages/product/Stock";
+import Additions from "./pages/product/Additions";
+import AdditionsStock from "./pages/product/AdditionsStock";
 
 const router = createBrowserRouter([
   {
@@ -71,6 +77,35 @@ const router = createBrowserRouter([
                   {
                     path: "new",
                     element: <CreateBanner />,
+                  },
+                ],
+              },
+              {
+                path: "product",
+                children: [
+                  {
+                    index: true,
+                    element: <Product />,
+                  },
+                  {
+                    path: "tags",
+                    element: <Tags />,
+                  },
+                  {
+                    path: "categories",
+                    element: <Categories />,
+                  },
+                  {
+                    path: "stock",
+                    element: <Stock />,
+                  },
+                  {
+                    path: "additions",
+                    element: <Additions />,
+                  },
+                  {
+                    path: "additions-stock",
+                    element: <AdditionsStock />,
                   },
                 ],
               },
