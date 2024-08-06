@@ -21,7 +21,7 @@ export default function ListBoxSelect({
 }: IProps) {
   return (
     <>
-      <h6 className="ml-2 sm:text-lg text-base font-bold text-slate-700 dark:text-slate-300 whitespace-nowrap ">
+      <h6 className="ml-2 sm:text-md text-base  text-slate-700 dark:text-slate-300 whitespace-nowrap ">
         {label}
       </h6>
       <Listbox value={selected} onChange={setSelected} disabled={disabled}>

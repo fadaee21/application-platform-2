@@ -1,25 +1,29 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 // import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Plus from "@/assets/icons/plus.svg?react";
 import { LinkButton } from "./buttons/LinkButton";
 import { PrimaryButtons } from "./buttons/PrimaryButtons";
-import useAxiosPrivate from "@/hooks/context/useAxiosPrivate";
-import { createBannerSchema } from "@/validator/uploadBannerImage";
-import { toast } from "react-toastify";
+
 import { LoadingSpinnerButton } from "./LoadingSpinner";
 
-const ALLOWED_WIDTH = 350;
 const ImageUploader: React.FC<{
-  cb?: () => void;
-  bannerId?: string;
-  bannerHeight: number;
-}> = ({ cb, bannerId, bannerHeight }) => {
-  const axiosPrivate = useAxiosPrivate();
-
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [uploading, setUploading] = useState<boolean>(false);
+  setPreviewUrl: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedImage: React.Dispatch<React.SetStateAction<File | null>>;
+  previewUrl: string | null;
+  selectedImage: File | null;
+  uploading: boolean;
+  handleImageUpload: () => Promise<void>;
+  validateAndSetImage: (file: File) => void;
+}> = ({
+  setPreviewUrl,
+  setSelectedImage,
+  previewUrl,
+  selectedImage,
+  uploading,
+  handleImageUpload,
+  validateAndSetImage,
+}) => {
   const ref = useRef<HTMLInputElement | null>(null);
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -35,60 +39,6 @@ const ImageUploader: React.FC<{
     const file = event.target.files?.[0];
     if (file) validateAndSetImage(file);
     if (ref.current) ref.current.value = "";
-  };
-  const validateAndSetImage = (file: File) => {
-    const bannerSchema = createBannerSchema(bannerHeight, ALLOWED_WIDTH);
-    const previewUrl = URL.createObjectURL(file);
-
-    const img = new Image();
-    img.src = previewUrl;
-    img.onload = () => {
-      const imageValidation = bannerSchema.safeParse({
-        size: file.size,
-        type: file.type,
-        height: img.height,
-        width: img.width,
-      });
-      if (!imageValidation.success) {
-        const errors = imageValidation.error.errors
-          .map((error) => error.message)
-          .join(", ");
-        console.log(errors);
-        toast.error(errors);
-        return;
-      }
-
-      setSelectedImage(file);
-      setPreviewUrl(previewUrl);
-      return () => URL.revokeObjectURL(previewUrl);
-    };
-  };
-
-  const handleImageUpload = async () => {
-    if (!selectedImage) return;
-    const bodyContent = new FormData();
-    bodyContent.append("file", selectedImage);
-    setUploading(true);
-    try {
-      await axiosPrivate.post(
-        `/panel/banner/add/image/${bannerId}`,
-        bodyContent,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      cb?.();
-      toast.success("عکس با موفقیت آپلود شد");
-      setSelectedImage(null);
-      setPreviewUrl(null);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      toast.error("خطا در آپلود عکس");
-    } finally {
-      setUploading(false);
-    }
   };
 
   const handleImageRemove = () => {
