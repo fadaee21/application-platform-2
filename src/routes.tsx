@@ -1,12 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
+import RequireAuth from "@components/auth/RequireAuth";
+import PersistLogin from "@components/auth/PersistLogin";
+import RootLayout from "@components/layout/RootLayout";
+
 import DashboardPage from "@pages/dashboard/DashboardPage";
 import LoginPage from "@pages/login/LoginPage";
 import RegisteredAccount from "@pages/registered-account/RegisteredAccount";
 import ProjectsPage from "@pages/projects/ProjectsPage";
 import SettingPage from "@pages/setting/SettingPage";
-import RequireAuth from "@components/auth/RequireAuth";
-import PersistLogin from "@components/auth/PersistLogin";
-import RootLayout from "@components/layout/RootLayout";
 import NotFoundPage from "@pages/not-found/NotFoundPage";
 import Transactions from "./pages/registered-account/Transactions";
 import AppSettings from "./pages/app-settings/AppSettings";
@@ -22,6 +23,20 @@ import Stock from "./pages/product/Stock";
 import Additions from "./pages/product/Additions";
 import AdditionsStock from "./pages/product/AdditionsStock";
 import AddCategory from "./pages/product/category/AddCategory";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const router = createBrowserRouter([
   {

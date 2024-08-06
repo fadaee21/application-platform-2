@@ -1,9 +1,9 @@
 import useAxiosPrivate from "@/hooks/context/useAxiosPrivate";
-import ImageUploader from "../ui-kit/ImageUploader";
 import { LoadingSpinnerButton } from "../ui-kit/LoadingSpinner";
 import { PrimaryButtons } from "../ui-kit/buttons/PrimaryButtons";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import ImageUploaderBanner from "./ImageUploaderBanner";
 
 interface IProps {
   idx: number;
@@ -60,8 +60,8 @@ const ImagesInBanner = ({
           </PrimaryButtons>
         </>
       ) : (
-        <ImageUploader
-          cb={mutate}
+        <ImageUploaderBanner
+          callBackFunc={mutate}
           bannerId={bannerId}
           bannerHeight={height}
         />
