@@ -1,11 +1,11 @@
-import { ButtonHTMLAttributes } from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import clsx from "clsx";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
 }
 
-export const PrimaryButtons: React.FC<ButtonProps> = ({
+export const OutlineButton: React.FC<ButtonProps> = ({
   children,
   className,
   disabled,
@@ -14,8 +14,8 @@ export const PrimaryButtons: React.FC<ButtonProps> = ({
 }) => {
   const buttonStyle = clsx(
     {
-      "bg-gray-400 text-gray-500 cursor-not-allowed": disabled,
-      "bg-indigo-400 hover:bg-indigo-500 dark:bg-indigo-900 hover:dark:bg-indigo-800 hover:text-slate-900 hover:dark:text-slate-50 text-gray-800 dark:text-slate-300":
+      "border border-gray-400 text-gray-400 cursor-not-allowed": disabled,
+      "border border-indigo-400 hover:border-indigo-600 dark:hover:border-indigo-400 hover:border-indigo-500 dark:border-indigo-500 text-indigo-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:text-indigo-500 dark:text-indigo-500":
         !disabled,
       "flex items-center justify-center px-4 py-2 text-sm font-semibold leading-6 rounded-md shadow-md whitespace-nowrap":
         true,
@@ -23,10 +23,12 @@ export const PrimaryButtons: React.FC<ButtonProps> = ({
     },
     className
   );
-//className="bg-red-400" define type to use for delete button
+
   return (
     <button className={buttonStyle} disabled={disabled} {...rest}>
       {children}
     </button>
   );
 };
+
+export default OutlineButton;

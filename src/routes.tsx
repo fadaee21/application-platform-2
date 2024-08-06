@@ -16,27 +16,14 @@ import BannerId from "./pages/banner/BannerId";
 import CreateBanner from "./pages/banner/CreateBanner";
 import Test from "./pages/test";
 import { Address } from "./pages/registered-account/Address";
-import Product from "./pages/product/Product";
+import Product from "./pages/product/product/Products";
 import Tags from "./pages/product/Tags";
 import Categories from "./pages/product/category/Categories";
 import Stock from "./pages/product/Stock";
 import Additions from "./pages/product/Additions";
 import AdditionsStock from "./pages/product/AdditionsStock";
 import AddCategory from "./pages/product/category/AddCategory";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import AddProducts from "./pages/product/product/AddProducts";
 
 const router = createBrowserRouter([
   {
@@ -100,8 +87,17 @@ const router = createBrowserRouter([
                 path: "product",
                 children: [
                   {
-                    index: true,
-                    element: <Product />,
+                    path: "",
+                    children: [
+                      {
+                        index: true,
+                        element: <Product />,
+                      },
+                      {
+                        path: "add",
+                        element: <AddProducts />,
+                      },
+                    ],
                   },
                   {
                     path: "tags",
@@ -117,7 +113,7 @@ const router = createBrowserRouter([
                       {
                         path: "add",
                         element: <AddCategory />,
-                      }
+                      },
                     ],
                   },
                   {
