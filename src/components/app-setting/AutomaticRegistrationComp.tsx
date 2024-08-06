@@ -31,15 +31,11 @@ const AutomaticRegistrationComp = () => {
         فعال سازی ثبت‌نام اتوماتیک
       </p>
       <div className="mt-4 md:mt-6">
-        <div className="flex items-center justify-between">
-          <p className="text-gray-600 dark:text-slate-300">
-            {isAutomaticReg ? "فعال" : "غیرفعال"}
-          </p>
-          <MySwitch
-            checked={isAutomaticReg}
-            onChange={toggleAutomaticRegistration}
-          />
-        </div>
+        <MySwitch
+          checked={isAutomaticReg}
+          onChange={toggleAutomaticRegistration}
+          label={isAutomaticReg ? "فعال" : "غیرفعال"}
+        />
       </div>
     </>
   );
