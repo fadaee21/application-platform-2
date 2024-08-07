@@ -1,14 +1,23 @@
 import { Field, Label, Switch } from "@headlessui/react";
+import clsx from "clsx";
 interface IProps {
   checked: boolean;
   onChange: () => void;
   label?: string;
+  noSpace?: boolean;
+  reverse?: boolean;
 }
 
-const MySwitch = ({ checked, onChange, label }: IProps) => {
+const MySwitch = ({ checked, onChange, label, noSpace, reverse }: IProps) => {
   return (
-    <Field className="flex items-center justify-between w-full ">
-      <Label>{label}</Label>
+    <Field
+      className={clsx(
+        "flex items-center w-full ",
+        noSpace ? "justify-start gap-5" : "justify-between",
+        reverse ? "flex-row-reverse" : "flex-row"
+      )}
+    >
+      {label && <Label className="mr-4">{label}</Label>}
       <Switch
         checked={checked}
         onChange={onChange}

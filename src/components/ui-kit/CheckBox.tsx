@@ -1,7 +1,7 @@
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
   isChecked: boolean;
   label?: string;
-  id?: string | number;
+  id?: string ;
 }
 
 const CheckboxOne = ({

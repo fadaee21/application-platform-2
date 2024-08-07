@@ -10,8 +10,8 @@ import { Checkbox } from '@headlessui/react';
 import ModalSKeleton from "@/components/ui-kit/ModalSkeleton";
 
 const Tags = () => {
-  const [search, setSearch] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [, setPage] = useState(1);
   const [checkedTags, setCheckedTags] = useState<{ [key: number]: boolean }>({});
   const [modalEdit, setModalEdit] = useState<boolean>(false);
 
