@@ -12,12 +12,11 @@ const MySwitch = ({ checked, onChange, label, noSpace, reverse }: IProps) => {
   return (
     <Field
       className={clsx(
-        "flex items-center w-full ",
-        noSpace ? "justify-start gap-5" : "justify-between",
+        "flex items-center w-full",
+        noSpace ? "justify-start" : "justify-between",
         reverse ? "flex-row-reverse" : "flex-row"
       )}
     >
-      {label && <Label className="mr-4">{label}</Label>}
       <Switch
         checked={checked}
         onChange={onChange}
@@ -32,6 +31,7 @@ const MySwitch = ({ checked, onChange, label, noSpace, reverse }: IProps) => {
         inline-block w-4 h-4 transform bg-gray-500 dark:bg-gray-400 rounded-full transition-transform duration-300`}
         />
       </Switch>
+      {label && <Label className="mr-4">{label}</Label>}
     </Field>
   );
 };
