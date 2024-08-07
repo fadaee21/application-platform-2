@@ -1,5 +1,6 @@
 import React, { TextareaHTMLAttributes, ReactNode, forwardRef } from "react";
 import clsx from "clsx/lite";
+import { Field, Label, Textarea } from "@headlessui/react";
 
 interface IProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   state: string;
@@ -22,8 +23,6 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, IProps>(
       onChange,
       label,
       id,
-      onClick,
-      icon,
       labelClass,
       inputClass,
       height, // Get the height prop
@@ -41,33 +40,21 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, IProps>(
     );
 
     return (
-      <>
-        <label htmlFor={id} className={labelClasses}>
+      <Field>
+        <Label htmlFor={id} className={labelClasses}>
           {label}
-        </label>
-        <div className={`relative w-full`}>
-          <textarea
-            className={inputClasses}
-            value={state}
-            onChange={onChange}
-            id={id}
-            name={id}
-            style={{ height }} // Apply height style
-            ref={ref}
-            {...rest} // Spread all textarea props
-          />
-          {icon && (
-            <button
-              onClick={onClick}
-              type="button"
-              aria-label={label}
-              className="absolute inset-y-0 left-0 pl-3 flex items-center cursor-default"
-            >
-              {icon}
-            </button>
-          )}
-        </div>
-      </>
+        </Label>
+        <Textarea
+          className={inputClasses}
+          value={state}
+          onChange={onChange}
+          id={id}
+          name={id}
+          style={{ height }} // Apply height style
+          ref={ref}
+          {...rest} // Spread all textarea props
+        />
+      </Field>
     );
   }
 );

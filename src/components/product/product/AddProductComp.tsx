@@ -123,6 +123,7 @@ const AddProductComp = () => {
             checked={productState.isActive}
             onChange={handleToggleActive}
             label={productState.isActive ? "فعال" : "غیرفعال"}
+            noSpace
           />
         </div>
         <div className="mb-4 w-full">

@@ -1,5 +1,6 @@
 import React, { InputHTMLAttributes, ReactNode, forwardRef } from "react";
 import clsx from "clsx/lite";
+import { Field, Input, Label } from "@headlessui/react";
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   state: string;
@@ -38,12 +39,15 @@ export const TextField = forwardRef<HTMLInputElement, IProps>(
     );
 
     return (
-      <>
-        <label htmlFor={id} className={labelClasses}>
-          {label}
-        </label>
-        <div className={`relative w-full ${className}`}> {/* Append the className prop here */}
-          <input
+      <div className={`relative w-full ${className}`}>
+        <Field>
+          {label && (
+            <Label htmlFor={id} className={labelClasses}>
+              {label}
+            </Label>
+          )}
+
+          <Input
             className={inputClasses}
             value={state}
             onChange={onChange}
@@ -62,8 +66,8 @@ export const TextField = forwardRef<HTMLInputElement, IProps>(
               {icon}
             </button>
           )}
-        </div>
-      </>
+        </Field>
+      </div>
     );
   }
 );
