@@ -61,7 +61,7 @@ export const TextField = forwardRef<HTMLInputElement, IProps>(
               onClick={onClick}
               type="button"
               aria-label={label}
-              className="absolute inset-y-0 left-0 pl-3 flex items-center cursor-default"
+              className="absolute bottom-0 -translate-y-1/2 left-0 pl-3 flex items-center cursor-default "
             >
               {icon}
             </button>
