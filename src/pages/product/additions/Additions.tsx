@@ -8,8 +8,9 @@ import Pagination from "@/components/ui-kit/Pagination";
 import { Checkbox } from "@headlessui/react";
 import ModalSKeleton from "@/components/ui-kit/ModalSkeleton";
 import { TextField } from "@/components/login/TextField";
+import router from "@/routes";
 
-const Tags = () => {
+const Additions = () => {
   const [search, setSearch] = useState<string | null>("");
   const [page, setPage] = useState(1);
   const [checkedTags, setCheckedTags] = useState<{ [key: number]: boolean }>(
@@ -19,7 +20,7 @@ const Tags = () => {
   const [modalAdd, setModalAdd] = useState<boolean>(false);
   const [newTag, setNewTag] = useState("");
   const [editedTagName, setEditedTagName] = useState<string>("");
-
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
@@ -38,7 +39,7 @@ const Tags = () => {
     if (checkedTagIds.length === 1) {
       const tagId = checkedTagIds[0];
       const tagName =
-        data.tags.find((tag) => tag.id === parseInt(tagId))?.name || "";
+        data.additions.find((tag) => tag.id === parseInt(tagId))?.name || "";
       setEditedTagName(tagName);
       setModalEdit(tagId);
     }
@@ -61,17 +62,17 @@ const Tags = () => {
   const isOneChecked = Object.values(checkedTags).filter(Boolean).length === 1;
 
   const data = {
-    tags: [
-      { id: 1, name: "الکترونیک" },
-      { id: 2, name: "کامپیوتر" },
-      { id: 3, name: "گجت‌ها" },
-      { id: 4, name: "تلفن‌ها" },
-      { id: 5, name: "ورزش" },
-      { id: 6, name: "کفش" },
-      { id: 7, name: "تناسب اندام" },
-      { id: 8, name: "لوازم خانگی" },
-      { id: 9, name: "آشپزخانه" },
-      { id: 10, name: "نوشیدنی‌ها" },
+    additions: [
+      { id: 1, collection: "سرویس آشپزخانه", name: "قاشق و چنگال" },
+      { id: 2, collection: "پک لپ‌تاپ", name: "موس" },
+      { id: 3, collection: "سرویس ناهارخوری", name: "بشقاب" },
+      { id: 4, collection: "ست حمام", name: "حوله" },
+      { id: 5, collection: "پک نوشت‌افزار", name: "خودکار" },
+      { id: 6, collection: "پک موبایل", name: "هدفون" },
+      { id: 7, collection: "سرویس قهوه‌خوری", name: "فنجان" },
+      { id: 8, collection: "ست سفر", name: "چمدان" },
+      { id: 9, collection: "پک کاردستی", name: "قیچی" },
+      { id: 10, collection: "سرویس نظافت", name: "جاروب" },
     ],
     pagination: {
       current_page: 1,
@@ -81,20 +82,22 @@ const Tags = () => {
     },
   };
 
+  const handleRoute = () => router.navigate("add");
   return (
     <div>
       <div className="w-full flex justify-end">
-      <h6 className="ml-auto text-xl">برچسب ها</h6>
-        <PrimaryButtons className="mb-4" onClick={() => setModalAdd(true)}>
+        <h6 className="ml-auto text-xl">افزودنی ها</h6>
+
+        <PrimaryButtons className="mb-4" onClick={handleRoute} >
           <Plus className="w-6 h-6 ml-4" />
-          برچسب جدید
+          مجموعه افزودنی جدید
         </PrimaryButtons>
       </div>
       <div className="p-4 rounded flex flex-col justify-between shadow-md bg-slate-50 dark:bg-slate-700  text-slate-700 dark:text-slate-300">
         <div className="w-80 pb-4">
           <TextField
             id="addressName"
-            placeholder="جستجوی در برچسب ها"
+            placeholder="جستجوی مجموعه افزودنی"
             label=""
             onChange={handleChange}
             state={search}
@@ -102,11 +105,11 @@ const Tags = () => {
           />
         </div>
         <div>
-          {data.tags.map((tag) => (
-            <div className="flex pb-4" key={tag.id}>
+          {data.additions.map((add) => (
+            <div className="flex pb-4" key={add.id}>
               <Checkbox
-                checked={!!checkedTags[tag.id]}
-                onChange={() => handleCheckboxChange(tag.id)}
+                checked={!!checkedTags[add.id]}
+                onChange={() => handleCheckboxChange(add.id)}
                 className="group block size-4 rounded border bg-white data-[checked]:bg-blue-500"
               >
                 <svg
@@ -122,7 +125,7 @@ const Tags = () => {
                   />
                 </svg>
               </Checkbox>
-              <p className="pr-2">{tag.name}</p>
+              <p className="pr-2">{add.name}</p>
             </div>
           ))}
         </div>
@@ -193,4 +196,4 @@ const Tags = () => {
   );
 };
 
-export default Tags;
+export default Additions;
