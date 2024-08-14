@@ -17,7 +17,7 @@ export default function LoginPage() {
 
   useEffect(() => userRef.current?.focus(), []);
 
-  const { errRes, handleSubmit, loading } = useLogin(loginInfo);
+  const { handleSubmit, loading } = useLogin(loginInfo);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLoginInfo({
@@ -113,26 +113,7 @@ export default function LoginPage() {
                 label="مرا به خاطر بسپار"
               />
             </form>
-            {/* <div className="w-full mt-4 text-left ">
-              <span className="inline-flex items-center justify-center w-10 px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-md dark:text-slate-300 dark:bg-gray-700 ring-1 ring-inset ring-gray-500/10">
-                11/{phoneCounter}
-              </span>
-            </div> */}
-            {errRes && errRes.length > 0 ? (
-              <ul className="p-2 mt-4 text-xs font-medium list-disc list-inside rounded-lg shadow-sm max-h-16 bg-rose-50 dark:bg-rose-950">
-                {errRes.map((error, index) => (
-                  <li className="text-rose-950 dark:text-rose-50" key={index}>
-                    {error}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="w-full h-10 mt-1" />
-            )}
           </div>
-          {/* <div className="w-full max-w-sm mx-auto mt-8">
-            <MySwitch />
-          </div> */}
         </div>
       </div>
     </>

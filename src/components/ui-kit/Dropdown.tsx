@@ -8,14 +8,13 @@ type Auth = {
   auth: IAuth | null;
 };
 
-
 const Dropdown = memo(({ auth }: Auth) => {
   // console.count("drop down is running");
   const { setAuth } = useAuth();
-  const handleLogout = () => {
+  const handleLogout = async () => {
     Cookies.remove("refreshToken");
     setAuth(null);
-    router.navigate("/", { replace: true });
+    router.navigate("/", { replace: true, state: { from: null } });
   };
   return (
     <Menu as="div" className="relative z-10 inline-block text-left">
@@ -39,10 +38,11 @@ const Dropdown = memo(({ auth }: Auth) => {
             <Menu.Item>
               {({ active }) => (
                 <button
-                  className={`${active
+                  className={`${
+                    active
                       ? "bg-gray-300 text-slate-900 dark:text-slate-50 dark:bg-slate-800/30"
                       : "text-gray-900 dark:text-slate-300"
-                    } group flex w-full items-center rounded-md px-2 py-2 text-sm hover:text-slate-900 hover:dark:text-slate-50`}
+                  } group flex w-full items-center rounded-md px-2 py-2 text-sm hover:text-slate-900 hover:dark:text-slate-50`}
                 >
                   مشاهده پروفایل
                 </button>
@@ -68,10 +68,11 @@ const Dropdown = memo(({ auth }: Auth) => {
               {({ active }) => (
                 <button
                   onClick={handleLogout}
-                  className={`${active
+                  className={`${
+                    active
                       ? "bg-gray-300 text-slate-900 dark:text-slate-50 dark:bg-slate-800/30"
                       : "text-gray-900 dark:text-slate-300"
-                    } group flex w-full items-center rounded-md px-2 py-2 text-sm hover:text-slate-900 hover:dark:text-slate-50`}
+                  } group flex w-full items-center rounded-md px-2 py-2 text-sm hover:text-slate-900 hover:dark:text-slate-50`}
                 >
                   خروج
                 </button>
