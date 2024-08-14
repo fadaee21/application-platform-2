@@ -70,8 +70,7 @@ function Sidebar({ children }: TChildren) {
         sidebarContent={sidebarContent}
       />
 
-      {/* //TODO:this layout cause vertical scroll even there is not content in it-change to prevent this */}
-      <div className="w-full min-h-screen mr-0 md:mr-72 bg-slate-50 dark:bg-slate-700">
+      <div className="w-full min-h-screen min-w-0 mr-0 md:mr-72 bg-slate-50 dark:bg-slate-700">
         <header className="flex items-center justify-end w-full h-16 pr-5 text-gray-900 border-b-2 border-stale-100 dark:border-slate-700 dark:text-slate-300">
           <Bars3
             className="w-5 h-5 ml-auto cursor-pointer md:hidden"
