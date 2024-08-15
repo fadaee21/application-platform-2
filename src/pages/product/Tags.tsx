@@ -6,13 +6,23 @@ import { TextField } from "@/components/login/TextField";
 import { useState } from "react";
 import Search from "@/assets/icons/search.svg?react";
 import Pagination from "@/components/ui-kit/Pagination";
-import { Checkbox } from '@headlessui/react';
+import { Checkbox } from "@headlessui/react";
 import ModalSKeleton from "@/components/ui-kit/ModalSkeleton";
+import useSWR from "swr";
+import { LoadingSpinnerPage } from "@/components/ui-kit/LoadingSpinner";
 
+const PAGE_SIZE = 20;
 const Tags = () => {
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading } = useSWR(
+    `/v1/admins/tag/search?page=${page - 1}&size=${PAGE_SIZE}`
+  );
+
   const [search, setSearch] = useState("");
-  const [, setPage] = useState(1);
-  const [checkedTags, setCheckedTags] = useState<{ [key: number]: boolean }>({});
+  const [checkedTags, setCheckedTags] = useState<{ [key: number]: boolean }>(
+    {}
+  );
   const [modalEdit, setModalEdit] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +51,7 @@ const Tags = () => {
   // Determine if exactly one checkbox is checked
   const isOneChecked = Object.values(checkedTags).filter(Boolean).length === 1;
 
-  const data = {
+  const dataMock = {
     tags: [
       { id: 1, name: "electronics" },
       { id: 2, name: "computers" },
@@ -62,6 +72,10 @@ const Tags = () => {
     },
   };
 
+  if (isLoading) {
+    return <LoadingSpinnerPage />;
+  }
+
   return (
     <div>
       <PrimaryButtons>
@@ -80,15 +94,24 @@ const Tags = () => {
           />
         </div>
         <div>
-          {data.tags.map((tag) => (
+          {dataMock.tags.map((tag) => (
             <div className="flex pb-4" key={tag.id}>
               <Checkbox
                 checked={!!checkedTags[tag.id]}
                 onChange={() => handleCheckboxChange(tag.id)}
                 className="group block size-4 rounded border bg-white data-[checked]:bg-blue-500"
               >
-                <svg className="stroke-white opacity-0 group-data-[checked]:opacity-100" viewBox="0 0 14 14" fill="none">
-                  <path d="M3 8L6 11L11 3.5" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                <svg
+                  className="stroke-white opacity-0 group-data-[checked]:opacity-100"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                >
+                  <path
+                    d="M3 8L6 11L11 3.5"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </Checkbox>
               <p className="pr-2">{tag.name}</p>
@@ -99,7 +122,9 @@ const Tags = () => {
           <Edit
             width={30}
             height={30}
-            className={`mx-2 cursor-pointer ${isOneChecked ? "" : "cursor-default opacity-50"}`}
+            className={`mx-2 cursor-pointer ${
+              isOneChecked ? "" : "cursor-default opacity-50"
+            }`}
             onClick={isOneChecked ? handleEditClick : undefined}
           />
           <Copy
@@ -110,10 +135,10 @@ const Tags = () => {
           />
         </div>
         <Pagination
-          currentPage={data.pagination.current_page}
+          currentPage={dataMock.pagination.current_page}
           onPageChange={(value) => setPage(value)}
-          pageSize={data.pagination.total_pages}
-          totalCount={data.pagination.total_items}
+          pageSize={dataMock.pagination.total_pages}
+          totalCount={dataMock.pagination.total_items}
         />
       </div>
       {modalEdit && (
