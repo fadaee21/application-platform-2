@@ -33,6 +33,7 @@ const Pagination = ({
         className={`px-3 h-8 text-center my-auto mx-1 text-slate-700 dark:text-slate-300 flex items-center rounded-full ${
           currentPage === 1 ? "cursor-default" : "hover: cursor-pointer"
         }`}
+        key="previous"
       >
         <button onClick={onPrevious} disabled={currentPage === 1}>
           <ChevronRight />
@@ -41,7 +42,10 @@ const Pagination = ({
       {paginationRange.map((pageNumber: number | string) => {
         if (pageNumber === DOTS) {
           return (
-            <li className="flex items-center h-8 px-3 mx-1 my-auto text-center text-slate-700 dark:text-slate-300 rounded-full cursor-default">
+            <li
+              className="flex items-center h-8 px-3 mx-1 my-auto text-center text-slate-700 dark:text-slate-300 rounded-full cursor-default"
+              key="dots"
+            >
               …
             </li>
           );
@@ -65,6 +69,7 @@ const Pagination = ({
           currentPage === lastPage ? "cursor-auto" : "hover: cursor-pointer"
         }`}
         onClick={onNext}
+        key="next"
       >
         <button onClick={onPrevious} disabled={currentPage === lastPage}>
           <ChevronLeft />

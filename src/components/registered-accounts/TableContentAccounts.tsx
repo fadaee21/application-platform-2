@@ -213,7 +213,7 @@ const TableContent = ({ selectedOption }: IProps) => {
         currentPage={page}
         onPageChange={(value) => setPage(value)}
         pageSize={pageSize}
-        totalCount={totalElements}
+        totalCount={1000000}
       />
     </>
   );
