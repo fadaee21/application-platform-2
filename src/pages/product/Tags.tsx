@@ -10,7 +10,7 @@ import ModalSKeleton from "@/components/ui-kit/ModalSkeleton";
 import useSWR from "swr";
 import { LoadingSpinnerPage } from "@/components/ui-kit/LoadingSpinner";
 import { TextField } from "@/components/login/TextField";
-
+import AddTags from "@/components/product/tags/AddTags";
 const PAGE_SIZE = 20;
 const Tags = () => {
   const [page, setPage] = useState(1);
@@ -19,13 +19,12 @@ const Tags = () => {
     `/v1/admins/tag/search?page=${page - 1}&size=${PAGE_SIZE}`
   );
 
-  const [checkedTags, setCheckedTags] = useState<{ [key: number]: boolean }>(
+  const [checkedTags, setCheckedTags] = useState<{ [key: string]: boolean }>(
     {}
   );
-  const [search, setSearch] = useState<string | null>("");
+  const [search, setSearch] = useState<string>("");
   const [modalEdit, setModalEdit] = useState<string | null>(null);
-  const [modalAdd, setModalAdd] = useState<boolean>(false);
-  const [newTag, setNewTag] = useState("");
+
   const [editedTagName, setEditedTagName] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +45,7 @@ const Tags = () => {
     if (checkedTagIds.length === 1) {
       const tagId = checkedTagIds[0];
       const tagName =
-        data.tags.find((tag) => tag.id === parseInt(tagId))?.name || "";
+        data.tags.find((tag: { id: number; name: string }) => tag.id === parseInt(tagId))?.name || "";
       setEditedTagName(tagName);
       setModalEdit(tagId);
     }
@@ -55,15 +54,6 @@ const Tags = () => {
   const handleSaveEdit = () => {
     console.log("Edited Tag:", editedTagName);
     setModalEdit(null);
-  };
-
-  const handleChangeNewTag = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTag(e.target.value);
-  };
-
-  const handleAddNewTag = () => {
-    console.log("New tag:", newTag);
-    setModalAdd(false);
   };
 
   const isOneChecked = Object.values(checkedTags).filter(Boolean).length === 1;
@@ -96,11 +86,8 @@ const Tags = () => {
   return (
     <div>
       <div className="w-full flex justify-end">
-      <h6 className="ml-auto text-xl">برچسب ها</h6>
-        <PrimaryButtons className="mb-4" onClick={() => setModalAdd(true)}>
-          <Plus className="w-6 h-6 ml-4" />
-          برچسب جدید
-        </PrimaryButtons>
+        <h6 className="ml-auto text-xl">برچسب ها</h6>
+        <AddTags />
       </div>
       <div className="p-4 rounded flex flex-col justify-between shadow-md bg-slate-50 dark:bg-slate-700  text-slate-700 dark:text-slate-300">
         <div className="w-80 pb-4">
@@ -165,8 +152,8 @@ const Tags = () => {
       <ModalSKeleton
         title="ویرایش برچسب"
         closeModal={() => setModalEdit(null)}
-        isShow={modalEdit}
-      >
+        isShow={!!modalEdit} 
+        >
         <div className="flex flex-col justify-center items-center gap-4">
           <TextField
             id="editTag"
@@ -178,26 +165,6 @@ const Tags = () => {
           <PrimaryButtons className="max-w-40" onClick={handleSaveEdit}>
             <Plus width={20} height={20} />
             اعمال تغییر
-          </PrimaryButtons>
-        </div>
-      </ModalSKeleton>
-
-      <ModalSKeleton
-        title="ایجاد برچسب جدید"
-        closeModal={() => setModalAdd(false)}
-        isShow={modalAdd}
-      >
-        <div className="flex flex-col justify-center items-center gap-4">
-          <TextField
-            id="addTag"
-            placeholder="برچسب جدید"
-            label=""
-            onChange={handleChangeNewTag}
-            state={newTag}
-          />
-          <PrimaryButtons className="max-w-40" onClick={handleAddNewTag}>
-            <Plus width={20} height={20} />
-            ایجاد برچسب جدید
           </PrimaryButtons>
         </div>
       </ModalSKeleton>
