@@ -1,6 +1,5 @@
 type Role = "SUPERUSER" | "ADMIN" | "USER";
 
-
 interface INavItem {
   id: string;
   name: string;
@@ -185,4 +184,55 @@ interface INeshan {
   formatted_address: string;
   village: unknown;
   county: string;
+}
+
+/*=========================================
+                                            
+              Responses(new)
+
+=========================================*/
+
+interface RootResponseNew<T> {
+  _embedded: T;
+  _links: Links;
+  page: Page;
+}
+
+interface userSearchArr {
+  userSearchResponseList: UserSearchResponseList[];
+}
+
+interface UserSearchResponseList {
+  userId: string;
+  username: string;
+  email: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  status: number;
+}
+
+interface Links {
+  self: Self;
+}
+
+interface Self {
+  href: string;
+}
+
+interface Page {
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  number: number;
+}
+
+interface IPostUserStatus {
+  userStatus?: number;
+}
+
+interface ILoginNew {
+  userId: string;
+  accessToken: string;
+  refreshToken: string;
 }

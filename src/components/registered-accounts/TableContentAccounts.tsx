@@ -4,6 +4,7 @@ import { useState } from "react";
 import { LoadingSpinnerTable } from "../ui-kit/LoadingSpinner";
 import { useSearchParams } from "react-router-dom";
 import router from "@/routes";
+import useFetcherPost from "@/hooks/useFetcherPost";
 
 interface IProps {
   selectedOption: {
@@ -18,15 +19,32 @@ const TableContent = ({ selectedOption }: IProps) => {
   const [page, setPage] = useState(1);
 
   const selectedOptionValue = selectedOption?.value;
-  const { data, isLoading } = useSWR<ResponseData<User>>(
-    `/panel/accounts/get/${selectedOptionValue}/${page - 1}/${pageSize}`
+  // const { data, isLoading } = useSWR<ResponseData<User>>(
+  //   `/panel/accounts/get/${selectedOptionValue}/${page - 1}/${pageSize}`
+  // );
+  // const totalElements = data?.body.totalElements || 0;
+
+  const fetcherPost = useFetcherPost();
+
+  const fetchUrl = (key: string | undefined = "") =>
+    `http://78.109.199.178:8080/v1/admins/user/search?page=0&size=10&key=${key}`;
+
+  const { data, isLoading } = useSWR(
+    selectedOption?.value ? fetchUrl(selectedOption.value) : null,
+    (url) =>
+      fetcherPost<IPostUserStatus, RootResponseNew<userSearchArr>>(url, {
+        arg: {
+          userStatus: Number(selectedOption?.value),
+        },
+      })
   );
-  const totalElements = data?.body.totalElements || 0;
-  const handleClick = (id: number) => {
+
+  const totalElements = data?.page.totalElements || 0;
+  const handleClick = (id: string) => {
     setSearchParams({ id: id.toString(), showModal: "true" });
   };
 
-  const handleNavigate = (id: number, path: string) => {
+  const handleNavigate = (id: string, path: string) => {
     router.navigate(`${path}/${id}`);
   };
 
@@ -111,14 +129,13 @@ const TableContent = ({ selectedOption }: IProps) => {
                         </td>
                       </tr>
                     ) : (
-                      data.body.content.map((user) => {
+                      data._embedded.userSearchResponseList.map((user) => {
                         const {
-                          first_name,
-                          last_name,
-                          mobile,
-                          national_code,
+                          firstName: first_name,
+                          userId: id,
+                          lastName: last_name,
+                          phoneNumber: mobile,
                           username,
-                          id,
                         } = user;
                         return (
                           <tr key={id}>
@@ -144,13 +161,15 @@ const TableContent = ({ selectedOption }: IProps) => {
                             </td>
                             <td className="px-6 py-4 text-center whitespace-nowrap">
                               <div className="text-sm text-slate-700 dark:text-slate-300">
-                                {national_code || "-"}
+                                {/* {national_code || "-"} */}
                               </div>
                             </td>
                             {selectedOptionValue === "registered" && (
                               <td className="px-6 py-4 text-center whitespace-nowrap flex gap-2 justify-center">
                                 <div className="text-sm text-slate-700 dark:text-slate-300">
-                                  <button onClick={() => handleClick(user.id)}>
+                                  <button
+                                    onClick={() => handleClick(user.userId)}
+                                  >
                                     شبا
                                   </button>
                                 </div>
@@ -158,7 +177,10 @@ const TableContent = ({ selectedOption }: IProps) => {
                                 <div className="text-sm text-slate-700 dark:text-slate-300">
                                   <button
                                     onClick={() =>
-                                      handleNavigate(user.id, "transactions")
+                                      handleNavigate(
+                                        user.userId,
+                                        "transactions"
+                                      )
                                     }
                                   >
                                     تراکنش ها
@@ -168,7 +190,7 @@ const TableContent = ({ selectedOption }: IProps) => {
                                 <div className="text-sm text-slate-700 dark:text-slate-300">
                                   <button
                                     onClick={() =>
-                                      handleNavigate(user.id, "address")
+                                      handleNavigate(user.userId, "address")
                                     }
                                   >
                                     آدرس

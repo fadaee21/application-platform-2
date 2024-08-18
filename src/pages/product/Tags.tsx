@@ -7,9 +7,22 @@ import Search from "@/assets/icons/search.svg?react";
 import Pagination from "@/components/ui-kit/Pagination";
 import { Checkbox } from "@headlessui/react";
 import ModalSKeleton from "@/components/ui-kit/ModalSkeleton";
-import { TextField } from "@/components/login/TextField";
+import useSWR from "swr";
+import { LoadingSpinnerPage } from "@/components/ui-kit/LoadingSpinner";
 
+const PAGE_SIZE = 20;
 const Tags = () => {
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading } = useSWR(
+    `/v1/admins/tag/search?page=${page - 1}&size=${PAGE_SIZE}`
+  );
+
+  const [search, setSearch] = useState("");
+  const [checkedTags, setCheckedTags] = useState<{ [key: number]: boolean }>(
+    {}
+  );
+  const [modalEdit, setModalEdit] = useState<boolean>(false);
   const [search, setSearch] = useState<string | null>("");
   const [page, setPage] = useState(1);
   const [checkedTags, setCheckedTags] = useState<{ [key: number]: boolean }>(
@@ -60,7 +73,7 @@ const Tags = () => {
 
   const isOneChecked = Object.values(checkedTags).filter(Boolean).length === 1;
 
-  const data = {
+  const dataMock = {
     tags: [
       { id: 1, name: "الکترونیک" },
       { id: 2, name: "کامپیوتر" },
@@ -80,6 +93,10 @@ const Tags = () => {
       total_items: 50,
     },
   };
+
+  if (isLoading) {
+    return <LoadingSpinnerPage />;
+  }
 
   return (
     <div>
@@ -102,7 +119,7 @@ const Tags = () => {
           />
         </div>
         <div>
-          {data.tags.map((tag) => (
+          {dataMock.tags.map((tag) => (
             <div className="flex pb-4" key={tag.id}>
               <Checkbox
                 checked={!!checkedTags[tag.id]}
@@ -143,10 +160,10 @@ const Tags = () => {
           />
         </div>
         <Pagination
-          currentPage={data.pagination.current_page}
+          currentPage={dataMock.pagination.current_page}
           onPageChange={(value) => setPage(value)}
-          pageSize={data.pagination.total_pages}
-          totalCount={data.pagination.total_items}
+          pageSize={dataMock.pagination.total_pages}
+          totalCount={dataMock.pagination.total_items}
         />
       </div>
 

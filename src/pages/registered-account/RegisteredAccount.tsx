@@ -47,16 +47,16 @@ const RegisteredAccount = () => {
 export default RegisteredAccount;
 
 const options = [
-  { value: "registered", label: "ثبت نام شده" },
-  { value: "unregistered", label: "ثبت نام نشده" },
-  { value: "unmatched/mobile", label: "عدم تطبیق موبایل و کد ملی" },
-  { value: "unmatched/birthDate", label: "عدم احراز ثبت احوال" },
+  { value: "4", label: "ثبت نام شده" },
+  { value: "1", label: "ثبت نام نشده" },
+  { value: "2", label: "عدم تطبیق موبایل و کد ملی" },
+  { value: "3", label: "عدم احراز ثبت احوال" },
 ];
 
-// const header: { [key: string]: string } = {
-//   registered: "کاربرانی که ثبت نام کرده‌اند",
-//   unregistered: "کاربرانی که هنوز ثبت نام نکرده‌اند",
-//   "unmatched/mobile": "کاربرانی که موبایل و کد ملی آن‌ها تطابق ندارد",
-//   "unmatched/birthDate":
-//     "کاربرانی که تاریخ تولد آن‌ها با اطلاعات ثبت احوال تطابق ندارد",
-// };
+
+//(0),
+//UNREGISTERED(1),
+//NOT_MATCH_MOBILE_NATIONAL_CODE(2),
+//NOT_AUTHORIZED_BY_REGISTER_OFFICE(3),
+//REGISTERED(4),
+//DISABLED(5);

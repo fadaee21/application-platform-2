@@ -1,29 +1,66 @@
-## Background Colors
 
-- **body:** `bg-slate-50 dark:bg-slate-900`
-- **sidebar-header:** `bg-slate-50 dark:bg-slate-700`
-- **active NavLink:** `bg-gray-300 dark:bg-slate-800/30`
-- **login page:** `bg-gray-200 dark:bg-gray-900`
-- **login form:** `bg-white dark:bg-gray-800`
-- **setting card:** `cyan-400`
+# API Data Fetching Guide
 
-## Text Colors
-
-- **Text color in the sidebar:** `text-slate-700 dark:text-slate-300`
-- **Text color of NavLink:** `text-slate-900 dark:text-slate-50`
-- **Text color of active NavLink:** `text-slate-900 dark:text-slate-50`
-- **Text color of hover NavLink:** `text-slate-900 dark:text-slate-50`
-
-## Error
-
-- **error messages:** `bg-rose-50 dark:bg-rose-950`
-- **Text color of error messages:** `text-rose-950 dark:text-rose-50`
-
-## Form
-
-- **Text color of the checkbox label:** `text-gray-600 dark:text-slate-300`
-- **the checkbox label:** `bg-gray-100 dark:bg-gray-700`
-- **input:** `w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-slate-300 block shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 bg-gray-100 dark:bg-gray-700 focus:ring-2 focus:ring-inset  focus:ring-indigo-400 dark:focus:ring-indigo-500 text-sm leading-6`
+This guide provides examples of how to fetch data using the POST method in different scenarios.
 
 
--- **borders:** ` border border-gray-300 dark:border-gray-700`
+## 1. Fetch Data with POST Method
+
+To fetch data using the POST method, use the following code:
+
+```typescript
+const fetcherPost = useFetcherPost();
+
+const fetchUrl = "http://78.109.199.178:8080/v1/admins/user/search?page=0&size=10";
+
+const { data, isLoading } = useSWR(fetchUrl, {
+  fetcher: () =>
+    fetcherPost<any, any>(fetchUrl, {
+      arg: {
+        userStatus: 3,
+      },
+    }),
+});
+```
+
+
+## 2. GET Data with POST Method on Page Load
+
+To GET data using the POST method when the page is first rendered and the argument state changes, use the following code:
+
+```typescript
+const fetcherPost = useFetcherPost();
+
+const fetchUrl = (key: string | undefined = "") =>
+  `http://78.109.199.178:8080/v1/admins/user/search?page=0&size=10&key=${key}`;
+
+const { data, isLoading } = useSWR(
+  selectedOption?.value ? fetchUrl(selectedOption.value) : null,
+  (url) =>
+    fetcherPost<any, any>(url, {
+      arg: {
+        userStatus: selectedOption?.value,
+      },
+    })
+);
+```
+
+
+## 3. POST Data with POST Method
+
+To POST data using the POST method, use the following code:
+
+```typescript
+const fetcherPost = useFetcherPost();
+
+const { trigger, isMutating } = useSWRMutation(
+  "/panel/login",
+  fetcherPost<TLoginInfo, LoginResponse>
+);
+
+const response = await trigger({
+  password: pwd,
+  username: user,
+  role,
+});
+```

@@ -30,3 +30,5 @@ export const usernameSchema = z
   .min(3, "نام کاربری باید حداقل 3 کاراکتر باشد")
   .max(30, "نام کاربری نباید بیشتر از 30 کاراکتر باشد");
 //   .refine((value: string) => /^[a-zA-Z0-9_]+$/.test(value), "نام کاربری باید فقط شامل حروف الفبا، اعداد و زیرخط (_) باشد");
+
+export const roleSchema = z.string()

@@ -15,7 +15,7 @@ const SimpleTable = ({ data, headers, isLoading, totalElements }: IProps) => {
     <>
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-          <div className="overflow-hidden border-b border-gray-200 shadow dark:border-gray-950 sm:rounded-lg">
+          <div className="overflow-x-auto border-b border-gray-200 shadow dark:border-gray-950 sm:rounded-lg">
             <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-800">
               <thead className="bg-gray-300 dark:bg-gray-800">
                 <tr>
@@ -23,7 +23,7 @@ const SimpleTable = ({ data, headers, isLoading, totalElements }: IProps) => {
                     <th
                       key={index}
                       scope="col"
-                      className="px-6 py-3 text-xs font-medium tracking-wider text-center uppercase text-slate-700 dark:text-slate-300"
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-center text-nowrap uppercase text-slate-700 dark:text-slate-300"
                     >
                       {header.label}
                     </th>
