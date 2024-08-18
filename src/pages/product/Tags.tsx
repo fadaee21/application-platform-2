@@ -9,6 +9,7 @@ import { Checkbox } from "@headlessui/react";
 import ModalSKeleton from "@/components/ui-kit/ModalSkeleton";
 import useSWR from "swr";
 import { LoadingSpinnerPage } from "@/components/ui-kit/LoadingSpinner";
+import { TextField } from "@/components/login/TextField";
 
 const PAGE_SIZE = 20;
 const Tags = () => {
@@ -18,16 +19,10 @@ const Tags = () => {
     `/v1/admins/tag/search?page=${page - 1}&size=${PAGE_SIZE}`
   );
 
-  const [search, setSearch] = useState("");
   const [checkedTags, setCheckedTags] = useState<{ [key: number]: boolean }>(
     {}
   );
-  const [modalEdit, setModalEdit] = useState<boolean>(false);
   const [search, setSearch] = useState<string | null>("");
-  const [page, setPage] = useState(1);
-  const [checkedTags, setCheckedTags] = useState<{ [key: number]: boolean }>(
-    {}
-  );
   const [modalEdit, setModalEdit] = useState<string | null>(null);
   const [modalAdd, setModalAdd] = useState<boolean>(false);
   const [newTag, setNewTag] = useState("");
