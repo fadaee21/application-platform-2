@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { PrimaryButtons } from "@/components/ui-kit/buttons/PrimaryButtons";
-import Plus from "@/assets/icons/plus.svg?react";
 import Copy from "@/assets/icons/copy.svg?react";
 import Edit from "@/assets/icons/edit.svg?react";
 import Search from "@/assets/icons/search.svg?react";
 import Pagination from "@/components/ui-kit/Pagination";
 import { Checkbox } from "@headlessui/react";
-import ModalSKeleton from "@/components/ui-kit/ModalSkeleton";
 import useSWR from "swr";
 import { LoadingSpinnerPage } from "@/components/ui-kit/LoadingSpinner";
 import { TextField } from "@/components/login/TextField";
 import AddTags from "@/components/product/tags/AddTags";
+import EditTagModal from "@/components/product/tags/EditTags";
+
 const PAGE_SIZE = 20;
 const Tags = () => {
   const [page, setPage] = useState(1);
@@ -22,16 +21,15 @@ const Tags = () => {
   const [checkedTags, setCheckedTags] = useState<{ [key: string]: boolean }>(
     {}
   );
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<string | null>("");
   const [modalEdit, setModalEdit] = useState<string | null>(null);
-
   const [editedTagName, setEditedTagName] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
-  const handleCheckboxChange = (id: number) => {
+  const handleCheckboxChange = (id: string) => {
     setCheckedTags((prev) => ({
       ...prev,
       [id]: !prev[id],
@@ -42,42 +40,20 @@ const Tags = () => {
     const checkedTagIds = Object.keys(checkedTags).filter(
       (id) => checkedTags[id]
     );
+
     if (checkedTagIds.length === 1) {
-      const tagId = checkedTagIds[0];
-      const tagName =
-        data.tags.find((tag: { id: number; name: string }) => tag.id === parseInt(tagId))?.name || "";
-      setEditedTagName(tagName);
-      setModalEdit(tagId);
+      const checkedId = checkedTagIds[0];
+      const checkedName =
+        data._embedded.tagSearchResponseList.find(
+          (tag: string) => tag.id === checkedId
+        )?.name || "";
+      setEditedTagName(checkedName);
+      setModalEdit(checkedId);
     }
   };
 
-  const handleSaveEdit = () => {
-    console.log("Edited Tag:", editedTagName);
-    setModalEdit(null);
-  };
-
   const isOneChecked = Object.values(checkedTags).filter(Boolean).length === 1;
-
-  const dataMock = {
-    tags: [
-      { id: 1, name: "الکترونیک" },
-      { id: 2, name: "کامپیوتر" },
-      { id: 3, name: "گجت‌ها" },
-      { id: 4, name: "تلفن‌ها" },
-      { id: 5, name: "ورزش" },
-      { id: 6, name: "کفش" },
-      { id: 7, name: "تناسب اندام" },
-      { id: 8, name: "لوازم خانگی" },
-      { id: 9, name: "آشپزخانه" },
-      { id: 10, name: "نوشیدنی‌ها" },
-    ],
-    pagination: {
-      current_page: 1,
-      per_page: 10,
-      total_pages: 5,
-      total_items: 50,
-    },
-  };
+  const totalElements = data?.page.totalElements || 0;
 
   if (isLoading) {
     return <LoadingSpinnerPage />;
@@ -101,8 +77,8 @@ const Tags = () => {
           />
         </div>
         <div>
-          {dataMock.tags.map((tag) => (
-            <div className="flex pb-4" key={tag.id}>
+          {data._embedded.tagSearchResponseList.map((tag, i) => (
+            <div className="flex pb-4" key={i}>
               <Checkbox
                 checked={!!checkedTags[tag.id]}
                 onChange={() => handleCheckboxChange(tag.id)}
@@ -142,32 +118,41 @@ const Tags = () => {
           />
         </div>
         <Pagination
-          currentPage={dataMock.pagination.current_page}
+          currentPage={page}
           onPageChange={(value) => setPage(value)}
-          pageSize={dataMock.pagination.total_pages}
-          totalCount={dataMock.pagination.total_items}
+          pageSize={PAGE_SIZE}
+          totalCount={totalElements}
         />
       </div>
 
-      <ModalSKeleton
-        title="ویرایش برچسب"
-        closeModal={() => setModalEdit(null)}
-        isShow={!!modalEdit} 
-        >
+      <EditTagModal
+        modalEdit={modalEdit}
+        setModalEdit={setModalEdit}
+        editedTagName={editedTagName}
+        setEditedTagName={setEditedTagName}
+        page={page}
+        setCheckedTags={setCheckedTags}
+      />
+
+      {/* <ModalSKeleton
+        title="ایجاد برچسب جدید"
+        closeModal={() => setModalAdd(false)}
+        isShow={modalAdd}
+      >
         <div className="flex flex-col justify-center items-center gap-4">
           <TextField
-            id="editTag"
-            placeholder=""
+            id="addTag"
+            placeholder="برچسب جدید"
             label=""
-            onChange={(e) => setEditedTagName(e.target.value)}
-            state={editedTagName}
+            onChange={handleChangeNewTag}
+            state={newTag}
           />
-          <PrimaryButtons className="max-w-40" onClick={handleSaveEdit}>
+          <PrimaryButtons className="max-w-40" onClick={handleAddNewTag}>
             <Plus width={20} height={20} />
-            اعمال تغییر
+            ایجاد برچسب جدید
           </PrimaryButtons>
         </div>
-      </ModalSKeleton>
+      </ModalSKeleton> */}
     </div>
   );
 };
