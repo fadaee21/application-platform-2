@@ -2,9 +2,10 @@ import { PrimaryButtons } from "@/components/ui-kit/buttons/PrimaryButtons";
 import Plus from "@/assets/icons/plus.svg?react";
 import ModalSKeleton from "@/components/ui-kit/ModalSkeleton";
 import { TextField } from "@/components/login/TextField";
-import axiosPrivate from "@/services/axios";
 import { toast } from "react-toastify";
 import { mutate } from "swr";
+import useFetcherPut from "@/hooks/useFetcherPut";
+import useSWRMutation from "swr/mutation";
 
 interface EditTagModalProps {
   modalEdit: string | null;
@@ -12,7 +13,9 @@ interface EditTagModalProps {
   editedTagName: string;
   setEditedTagName: (value: string) => void;
   page: number;
-  setCheckedTags: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
+  setCheckedTags: React.Dispatch<
+    React.SetStateAction<{ [key: string]: boolean }>
+  >;
 }
 
 const EditTagModal = ({
@@ -21,24 +24,26 @@ const EditTagModal = ({
   editedTagName,
   setEditedTagName,
   page,
-  setCheckedTags
+  setCheckedTags,
 }: EditTagModalProps) => {
+  const fetcherPut = useFetcherPut();
+
+  const { trigger, isMutating } = useSWRMutation(
+    `/v1/admins/tag/${modalEdit}`,
+    fetcherPut
+  );
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     try {
-      const url = `/v1/admins/tag/${modalEdit}`;
-
-      const res = await axiosPrivate.put(url, {
+      await trigger({
         name: editedTagName,
         status: 0,
       });
 
-      if (res.status === 200) {
-        toast.success("اطلاعات با موفقیت ثبت شد");
-        mutate(`/v1/admins/tag/search?page=${page - 1}&size=${20}`);
-        setModalEdit(null);
-        setCheckedTags({})
-      }
+      toast.success("اطلاعات با موفقیت ثبت شد");
+      mutate(`/v1/admins/tag/search?page=${page - 1}&size=20`);
+      setModalEdit(null);
+      setCheckedTags({});
     } catch (err) {
       toast.error("مشکلی پیش آمد، دوباره تلاش کنید");
     }
@@ -58,7 +63,11 @@ const EditTagModal = ({
           onChange={(e) => setEditedTagName(e.target.value)}
           state={editedTagName}
         />
-        <PrimaryButtons className="max-w-40" onClick={handleSubmit}>
+        <PrimaryButtons
+          className="max-w-40"
+          onClick={handleSubmit}
+          disabled={isMutating}
+        >
           <Plus width={20} height={20} />
           اعمال تغییر
         </PrimaryButtons>

@@ -3,13 +3,12 @@ import Copy from "@/assets/icons/copy.svg?react";
 import Edit from "@/assets/icons/edit.svg?react";
 import Search from "@/assets/icons/search.svg?react";
 import Pagination from "@/components/ui-kit/Pagination";
-import { Checkbox } from "@headlessui/react";
 import useSWR from "swr";
 import { LoadingSpinnerPage } from "@/components/ui-kit/LoadingSpinner";
 import { TextField } from "@/components/login/TextField";
 import AddTags from "@/components/product/tags/AddTags";
 import EditTagModal from "@/components/product/tags/EditTags";
-
+import TagList from "@/components/product/tags/TagList";
 const PAGE_SIZE = 20;
 interface Tag {
   id: string;
@@ -80,31 +79,12 @@ const Tags = () => {
             icon={<Search width={20} height={20} />}
           />
         </div>
-        <div>
-          {data._embedded.tagSearchResponseList.map((tag :Tag, i:number) => (
-            <div className="flex pb-4" key={i}>
-              <Checkbox
-                checked={!!checkedTags[tag.id]}
-                onChange={() => handleCheckboxChange(tag.id)}
-                className="group block size-4 rounded border bg-white data-[checked]:bg-blue-500"
-              >
-                <svg
-                  className="stroke-white opacity-0 group-data-[checked]:opacity-100"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                >
-                  <path
-                    d="M3 8L6 11L11 3.5"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Checkbox>
-              <p className="pr-2">{tag.name}</p>
-            </div>
-          ))}
-        </div>
+        <TagList
+          tags={data._embedded.tagSearchResponseList}
+          checkedTags={checkedTags}
+          onCheckboxChange={handleCheckboxChange}
+        />
+
         <div className="flex justify-end p-4">
           <Edit
             width={30}
