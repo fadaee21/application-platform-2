@@ -11,6 +11,10 @@ import AddTags from "@/components/product/tags/AddTags";
 import EditTagModal from "@/components/product/tags/EditTags";
 
 const PAGE_SIZE = 20;
+interface Tag {
+  id: string;
+  name: string;
+}
 const Tags = () => {
   const [page, setPage] = useState(1);
 
@@ -21,7 +25,7 @@ const Tags = () => {
   const [checkedTags, setCheckedTags] = useState<{ [key: string]: boolean }>(
     {}
   );
-  const [search, setSearch] = useState<string | null>("");
+  const [search, setSearch] = useState<string >("");
   const [modalEdit, setModalEdit] = useState<string | null>(null);
   const [editedTagName, setEditedTagName] = useState<string>("");
 
@@ -45,7 +49,7 @@ const Tags = () => {
       const checkedId = checkedTagIds[0];
       const checkedName =
         data._embedded.tagSearchResponseList.find(
-          (tag: string) => tag.id === checkedId
+          (tag: Tag) => tag.id === checkedId
         )?.name || "";
       setEditedTagName(checkedName);
       setModalEdit(checkedId);
@@ -77,7 +81,7 @@ const Tags = () => {
           />
         </div>
         <div>
-          {data._embedded.tagSearchResponseList.map((tag, i) => (
+          {data._embedded.tagSearchResponseList.map((tag :Tag, i:number) => (
             <div className="flex pb-4" key={i}>
               <Checkbox
                 checked={!!checkedTags[tag.id]}
@@ -133,27 +137,7 @@ const Tags = () => {
         page={page}
         setCheckedTags={setCheckedTags}
       />
-
-      {/* <ModalSKeleton
-        title="ایجاد برچسب جدید"
-        closeModal={() => setModalAdd(false)}
-        isShow={modalAdd}
-      >
-        <div className="flex flex-col justify-center items-center gap-4">
-          <TextField
-            id="addTag"
-            placeholder="برچسب جدید"
-            label=""
-            onChange={handleChangeNewTag}
-            state={newTag}
-          />
-          <PrimaryButtons className="max-w-40" onClick={handleAddNewTag}>
-            <Plus width={20} height={20} />
-            ایجاد برچسب جدید
-          </PrimaryButtons>
-        </div>
-      </ModalSKeleton> */}
-    </div>
+   </div>
   );
 };
 

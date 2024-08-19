@@ -12,7 +12,7 @@ interface EditTagModalProps {
   editedTagName: string;
   setEditedTagName: (value: string) => void;
   page: number;
-  setCheckedTags: { [key: string]: boolean | object };
+  setCheckedTags: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
 }
 
 const EditTagModal = ({
@@ -23,7 +23,7 @@ const EditTagModal = ({
   page,
   setCheckedTags
 }: EditTagModalProps) => {
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     try {
       const url = `/v1/admins/tag/${modalEdit}`;
@@ -48,7 +48,7 @@ const EditTagModal = ({
     <ModalSKeleton
       title="ویرایش برچسب"
       closeModal={() => setModalEdit(null)}
-      isShow={modalEdit}
+      isShow={!!modalEdit}
     >
       <div className="flex flex-col justify-center items-center gap-4">
         <TextField
