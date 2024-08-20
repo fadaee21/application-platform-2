@@ -1,5 +1,6 @@
 import { PrimaryButtons } from "@/components/ui-kit/buttons/PrimaryButtons";
 import Plus from "@/assets/icons/plus.svg?react";
+import { LoadingSpinnerButton } from "@/components/ui-kit/LoadingSpinner";
 import ModalSKeleton from "@/components/ui-kit/ModalSkeleton";
 import { TextField } from "@/components/login/TextField";
 import { toast } from "react-toastify";
@@ -34,10 +35,11 @@ const EditTagModal = ({
   );
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    console.log(isMutating);
     try {
       await trigger({
         name: editedTagName,
-        status: 0,
+        status: 1,
       });
 
       toast.success("اطلاعات با موفقیت ثبت شد");
@@ -68,8 +70,14 @@ const EditTagModal = ({
           onClick={handleSubmit}
           disabled={isMutating}
         >
-          <Plus width={20} height={20} />
-          اعمال تغییر
+          {isMutating ? (
+            <LoadingSpinnerButton />
+          ) : (
+            <>
+              <Plus width={20} height={20} />
+              اعمال تغییر
+            </>
+          )}
         </PrimaryButtons>
       </div>
     </ModalSKeleton>

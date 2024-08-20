@@ -7,6 +7,7 @@ import useFetcherPost from "@/hooks/useFetcherPost";
 import { toast } from "react-toastify";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
+import { LoadingSpinnerButton } from "@/components/ui-kit/LoadingSpinner";
 
 function AddTags() {
   const [modalAdd, setModalAdd] = useState<boolean>(false);
@@ -23,7 +24,6 @@ function AddTags() {
       await trigger({ name: newTag, type: 0 });
       toast.success("برچسب با موفقیت افزوده شد");
       mutate(`/v1/admins/tag/search?page=0&size=20`);
-
     } catch (error) {
       console.error("Error uploading tags:", error);
       toast.error("خطا در افزودن برچسب");
@@ -55,8 +55,14 @@ function AddTags() {
             onClick={handleAddNewTag}
             disabled={isMutating}
           >
-            <Plus width={20} height={20} />
-            ایجاد برچسب جدید
+            {isMutating ? (
+              <LoadingSpinnerButton />
+            ) : (
+              <>
+                <Plus width={20} height={20} />
+                ایجاد برچسب جدید
+              </>
+            )}
           </PrimaryButtons>
         </div>
       </ModalSKeleton>
