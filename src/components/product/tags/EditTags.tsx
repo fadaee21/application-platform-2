@@ -35,7 +35,6 @@ const EditTagModal = ({
   );
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    console.log(isMutating);
     try {
       await trigger({
         name: editedTagName,
