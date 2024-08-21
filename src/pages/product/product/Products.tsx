@@ -5,12 +5,18 @@ import { PrimaryButtons } from "@/components/ui-kit/buttons/PrimaryButtons";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import Plus from "@/assets/icons/plus.svg?react";
 import router from "@/routes";
+
+const PAGE_SIZE = 10;
+
 const Products = () => {
   const handleRoute = () => router.navigate("add");
+  // const handleRoute = () => {};
 
+ 
   return (
     <>
       <div className="w-full flex justify-end">
+        <h6 className="ml-auto text-xl">محصول ها</h6>
         <PrimaryButtons onClick={handleRoute} className="mb-4">
           <Plus className="w-6 h-6 ml-4" />
           افزودن محصول
@@ -53,11 +59,11 @@ export default Products;
 const categories = [
   {
     name: "همه",
-    Component: <AllProducts />,
+    Component: <AllProducts  />,
   },
   {
     name: "فعال",
-    Component: <ActivateProduct />,
+    Component: <ActivateProduct pageSize={PAGE_SIZE} />,
   },
   {
     name: "غیر فعال",

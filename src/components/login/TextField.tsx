@@ -8,6 +8,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   label: string;
   icon?: ReactNode;
+  comp?: ReactNode;
   onClick?: () => void;
   labelClass?: string;
   inputClass?: string;
@@ -22,6 +23,7 @@ export const TextField = forwardRef<HTMLInputElement, IProps>(
       id,
       onClick,
       icon,
+      comp,
       labelClass,
       inputClass,
       className, // Get the className prop
@@ -66,6 +68,7 @@ export const TextField = forwardRef<HTMLInputElement, IProps>(
               {icon}
             </button>
           )}
+          {comp}
         </Field>
       </div>
     );

@@ -6,6 +6,7 @@ import useAxiosPrivate from "./context/useAxiosPrivate";
  * This hook is used to fetch data from server with POST method.
  * It uses the private axios instance which has the token in its header.
  *
+ * @param {object} [headers={}] - Optional headers to include in the request.
  * @returns A function that takes a string (url) and an object (arg) as parameters and returns a Promise.
  * The Promise resolves to the response data after the request is finished.
  *
@@ -25,7 +26,7 @@ import useAxiosPrivate from "./context/useAxiosPrivate";
  *
  *
  */
-const useFetcherPost = () => {
+const useFetcherPost = ({ headers = {} }: { headers?: object } = {}) => {
   const axiosPrivate = useAxiosPrivate();
 
   /**
@@ -43,7 +44,8 @@ const useFetcherPost = () => {
   const fetcherPost = async <T extends object | undefined, R>(
     url: string,
     { arg }: { arg: T }
-  ): Promise<R> => axiosPrivate.post<R>(url, arg).then((res) => res.data);
+  ): Promise<R> =>
+    axiosPrivate.post<R>(url, arg, { headers }).then((res) => res.data);
 
   return fetcherPost;
 };
