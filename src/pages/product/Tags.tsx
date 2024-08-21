@@ -1,17 +1,19 @@
-import { PrimaryButtons } from "@/components/ui-kit/buttons/PrimaryButtons";
-import Plus from "@/assets/icons/plus.svg?react";
+import { useState } from "react";
 import Copy from "@/assets/icons/copy.svg?react";
 import Edit from "@/assets/icons/edit.svg?react";
-import { TextField } from "@/components/login/TextField";
-import { useState } from "react";
 import Search from "@/assets/icons/search.svg?react";
 import Pagination from "@/components/ui-kit/Pagination";
-import { Checkbox } from "@headlessui/react";
-import ModalSKeleton from "@/components/ui-kit/ModalSkeleton";
 import useSWR from "swr";
 import { LoadingSpinnerPage } from "@/components/ui-kit/LoadingSpinner";
-
+import { TextField } from "@/components/login/TextField";
+import AddTags from "@/components/product/tags/AddTags";
+import EditTagModal from "@/components/product/tags/EditTags";
+import TagList from "@/components/product/tags/TagList";
 const PAGE_SIZE = 20;
+interface Tag {
+  id: string;
+  name: string;
+}
 const Tags = () => {
   const [page, setPage] = useState(1);
 
@@ -19,17 +21,18 @@ const Tags = () => {
     `/v1/admins/tag/search?page=${page - 1}&size=${PAGE_SIZE}`
   );
 
-  const [search, setSearch] = useState("");
-  const [checkedTags, setCheckedTags] = useState<{ [key: number]: boolean }>(
+  const [checkedTags, setCheckedTags] = useState<{ [key: string]: boolean }>(
     {}
   );
-  const [modalEdit, setModalEdit] = useState<boolean>(false);
+  const [search, setSearch] = useState<string >("");
+  const [modalEdit, setModalEdit] = useState<string | null>(null);
+  const [editedTagName, setEditedTagName] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
-  const handleCheckboxChange = (id: number) => {
+  const handleCheckboxChange = (id: string) => {
     setCheckedTags((prev) => ({
       ...prev,
       [id]: !prev[id],
@@ -37,40 +40,23 @@ const Tags = () => {
   };
 
   const handleEditClick = () => {
-    // Count the number of checked checkboxes
-    const checkedCount = Object.values(checkedTags).filter(Boolean).length;
+    const checkedTagIds = Object.keys(checkedTags).filter(
+      (id) => checkedTags[id]
+    );
 
-    if (checkedCount === 1) {
-      setModalEdit(true);
-    } else {
-      // Optionally, provide feedback if needed
-      console.log("Please select exactly one checkbox.");
+    if (checkedTagIds.length === 1) {
+      const checkedId = checkedTagIds[0];
+      const checkedName =
+        data._embedded.tagSearchResponseList.find(
+          (tag: Tag) => tag.id === checkedId
+        )?.name || "";
+      setEditedTagName(checkedName);
+      setModalEdit(checkedId);
     }
   };
 
-  // Determine if exactly one checkbox is checked
   const isOneChecked = Object.values(checkedTags).filter(Boolean).length === 1;
-
-  const dataMock = {
-    tags: [
-      { id: 1, name: "electronics" },
-      { id: 2, name: "computers" },
-      { id: 3, name: "gadgets" },
-      { id: 4, name: "phones" },
-      { id: 5, name: "sports" },
-      { id: 6, name: "footwear" },
-      { id: 7, name: "fitness" },
-      { id: 8, name: "home_appliances" },
-      { id: 9, name: "kitchen" },
-      { id: 10, name: "beverages" },
-    ],
-    pagination: {
-      current_page: 1,
-      per_page: 10,
-      total_pages: 5,
-      total_items: 50,
-    },
-  };
+  const totalElements = data?.page.totalElements || 0;
 
   if (isLoading) {
     return <LoadingSpinnerPage />;
@@ -78,79 +64,60 @@ const Tags = () => {
 
   return (
     <div>
-      <PrimaryButtons>
-        <Plus width={20} height={20} />
-        برچسب جدید
-      </PrimaryButtons>
-      <div className="flex flex-col m-5 px-10 py-28 rounded shadow-md bg-slate-50 dark:bg-slate-700">
+      <div className="w-full flex justify-end">
+        <h6 className="ml-auto text-xl">برچسب ها</h6>
+        <AddTags />
+      </div>
+      <div className="p-4 rounded flex flex-col justify-between shadow-md bg-slate-50 dark:bg-slate-700  text-slate-700 dark:text-slate-300">
         <div className="w-80 pb-4">
           <TextField
             id="addressName"
-            placeholder="جستجوی برچسب"
+            placeholder="جستجوی در برچسب ها"
             label=""
             onChange={handleChange}
             state={search}
             icon={<Search width={20} height={20} />}
           />
         </div>
-        <div>
-          {dataMock.tags.map((tag) => (
-            <div className="flex pb-4" key={tag.id}>
-              <Checkbox
-                checked={!!checkedTags[tag.id]}
-                onChange={() => handleCheckboxChange(tag.id)}
-                className="group block size-4 rounded border bg-white data-[checked]:bg-blue-500"
-              >
-                <svg
-                  className="stroke-white opacity-0 group-data-[checked]:opacity-100"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                >
-                  <path
-                    d="M3 8L6 11L11 3.5"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Checkbox>
-              <p className="pr-2">{tag.name}</p>
-            </div>
-          ))}
-        </div>
+        <TagList
+          tags={data._embedded.tagSearchResponseList}
+          checkedTags={checkedTags}
+          onCheckboxChange={handleCheckboxChange}
+        />
+
         <div className="flex justify-end p-4">
           <Edit
             width={30}
             height={30}
-            className={`mx-2 cursor-pointer ${
-              isOneChecked ? "" : "cursor-default opacity-50"
+            className={`mx-2  ${
+              isOneChecked ? "cursor-pointer" : "opacity-50"
             }`}
             onClick={isOneChecked ? handleEditClick : undefined}
           />
           <Copy
             width={30}
             height={30}
-            className="mx-2 cursor-pointer"
+            className="mx-2 opacity-50"
             onClick={() => console.log("copy")}
           />
         </div>
         <Pagination
-          currentPage={dataMock.pagination.current_page}
+          currentPage={page}
           onPageChange={(value) => setPage(value)}
-          pageSize={dataMock.pagination.total_pages}
-          totalCount={dataMock.pagination.total_items}
+          pageSize={PAGE_SIZE}
+          totalCount={totalElements}
         />
       </div>
-      {modalEdit && (
-        <ModalSKeleton
-          title="EDIT"
-          closeModal={() => setModalEdit(false)}
-          isShow={modalEdit}
-        >
-          modal
-        </ModalSKeleton>
-      )}
-    </div>
+
+      <EditTagModal
+        modalEdit={modalEdit}
+        setModalEdit={setModalEdit}
+        editedTagName={editedTagName}
+        setEditedTagName={setEditedTagName}
+        page={page}
+        setCheckedTags={setCheckedTags}
+      />
+   </div>
   );
 };
 
