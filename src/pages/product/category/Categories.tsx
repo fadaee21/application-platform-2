@@ -13,17 +13,20 @@ const Categories = () => {
   const fetcherPost = useFetcherPost();
   const PAGE_SIZE = 20;
 
-  const fetchUrl = `http://78.109.199.178:8080/v1/admins/category/search?page=${
+  const fetchUrl = `/v1/admins/category/search?page=${
     page - 1
   }&size=${PAGE_SIZE}`;
 
-  const { data, isLoading } = useSWR(fetchUrl, {
+  const { data, isLoading } = useSWR<
+    RootResponseNew<CategorySearchResponseList>
+  >(fetchUrl, {
     fetcher: () =>
-      fetcherPost<any, any>(fetchUrl, {
-        arg: {
-          userStatus: 3,
-        },
-      }),
+      fetcherPost<object, RootResponseNew<CategorySearchResponseList>>(
+        fetchUrl,
+        {
+          arg: {},
+        }
+      ),
   });
   const totalElements = data?.page.totalElements || 0;
 
@@ -36,10 +39,8 @@ const Categories = () => {
     );
   }
 
-  if (
-    !data._embedded.categorySearchResponseList ||
-    data._embedded.categorySearchResponseList.length === 0
-  ) {
+  const categories = data?._embedded.categorySearchResponseList || [];
+  if (categories.length === 0) {
     return (
       <div className="grid place-content-center w-full h-96">
         <p>شما دسته بندی برای محصولات خود ندارید</p>
@@ -57,7 +58,7 @@ const Categories = () => {
         </PrimaryButtons>
       </div>
       <div className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2 lg:grid-cols-3">
-        {data._embedded.categorySearchResponseList.map((category: any) => (
+        {data?._embedded.categorySearchResponseList.map((category) => (
           <div
             key={category.id}
             className="border rounded-lg shadow-md p-4 flex flex-col items-center"

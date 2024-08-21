@@ -236,3 +236,26 @@ interface ILoginNew {
   accessToken: string;
   refreshToken: string;
 }
+interface IAddressUserNew {
+  id: string;
+  name: string;
+  plaque: number;
+  contactNumber: string;
+  postalCode: string;
+  unit: string;
+  latAndLong: string;
+  detail: string;
+}
+
+
+interface CategorySearchResponseList {
+  categorySearchResponseList: ICategorySearchResponse[]
+}
+
+interface ICategorySearchResponse {
+  id: string
+  name: string
+  description: string
+  images: string[]
+  tags: string[]
+}

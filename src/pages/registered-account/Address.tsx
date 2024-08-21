@@ -13,9 +13,10 @@ export const Address = () => {
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => setShowModal(!showModal);
   const { accountId } = useParams();
-  const { data, isLoading, mutate } = useSWR<
-    ResponseDataNoPagination<IAddressUser>
-  >(`/panel/accounts/address/get_all/${accountId}`);
+  const { data, isLoading, mutate } = useSWR<IAddressUserNew[]>(
+  // >(`/panel/accounts/address/get_all/${accountId}`);
+    `/v1/admins/address/${accountId}`
+  );
 
   if (isLoading) {
     return <LoadingSpinnerPage />;

@@ -11,8 +11,8 @@ import { LoadingSpinnerButton } from "@/components/ui-kit/LoadingSpinner";
 const MapRegUser = lazy(() => import("./MapRegUser"));
 
 interface IProps {
-  address: IAddressUser;
-  mutate: KeyedMutator<ResponseDataNoPagination<IAddressUser>>;
+  address: IAddressUserNew;
+  mutate: KeyedMutator<IAddressUserNew[]>;
   accountId?: string;
 }
 
@@ -21,16 +21,24 @@ const UserAddress = ({ address, mutate, accountId }: IProps) => {
   const toggleDeleteModal = () => setDeleteModal(!deleteModal);
   const [editModal, setEditModal] = useState(false);
   const toggleEditModal = () => setEditModal(!editModal);
-  const { longAndLat, addressName, number, phoneNo, postalCode, unit } =
-    address;
-  const [lat, lng] = longAndLat
-    ? longAndLat.split(",").map(Number)
+  const {
+    contactNumber,
+    latAndLong,
+    name,
+    plaque,
+    postalCode,
+    unit,
+    id,
+    detail,
+  } = address;
+  const [lat, lng] = latAndLong
+    ? latAndLong.split(",").map(Number)
     : [undefined, undefined];
-
+  console.log({ latAndLong});
   const handleRemoveAddress = async () => {
     try {
       const res = await axiosPrivate.delete(
-        `/panel/accounts/address/delete/${accountId}/${addressName}`
+        `/v1/admins/address/${accountId}/${id}`
       );
       if (res.status === 200) {
         toast.success("اطلاعات با موفقیت حذف شد");
@@ -44,12 +52,12 @@ const UserAddress = ({ address, mutate, accountId }: IProps) => {
 
   return (
     <>
-      <h2 className="m-1 text-xl font-bold mb-6 md:mb-0">{addressName}</h2>
+      <h2 className="m-1 text-xl font-bold mb-6 md:mb-0">{name}</h2>
       <div className="flex flex-col h-auto m-1 overflow-hidden md:flex-row md:h-80">
         <div className="flex flex-col order-2 w-full h-full px-4 md:w-1/2 md:order-1">
           <ul className="my-3 space-y-2 text-lg">
             <li>
-              <strong>پلاک:</strong> {number}
+              <strong>پلاک:</strong> {plaque}
             </li>
             <li>
               <strong>واحد:</strong> {unit}
@@ -58,7 +66,10 @@ const UserAddress = ({ address, mutate, accountId }: IProps) => {
               <strong>کد پستی:</strong> {postalCode}
             </li>
             <li>
-              <strong>شماره تماس :</strong> {phoneNo}
+              <strong>شماره تماس :</strong> {contactNumber}
+            </li>
+            <li>
+              <strong>آدرس :</strong> {detail}
             </li>
           </ul>
           <div className="flex flex-col gap-2 mt-auto md:flex-row">
@@ -82,13 +93,13 @@ const UserAddress = ({ address, mutate, accountId }: IProps) => {
         isShow={deleteModal}
       >
         <ModalWarningContent
-          textContent={`از حذف آدرس  ${addressName} مطمئن هستید؟`}
+          textContent={`از حذف آدرس  ${name} مطمئن هستید؟`}
           admitFunc={handleRemoveAddress}
           rejectFunc={toggleDeleteModal}
         />
       </ModalSKeleton>
       <ModalSKeleton
-        title={`ویرایش آدرس ${addressName}`}
+        title={`ویرایش آدرس ${name}`}
         closeModal={toggleEditModal}
         isShow={editModal}
       >

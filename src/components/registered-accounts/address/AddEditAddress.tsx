@@ -9,9 +9,9 @@ import useReverseGeocoding from "@/hooks/useReverseGeocoding";
 const MapRegUser = lazy(() => import("./MapRegUser"));
 interface IProps {
   accountId?: string;
-  mutate: KeyedMutator<ResponseDataNoPagination<IAddressUser>>;
+  mutate: KeyedMutator<IAddressUserNew[]>;
   toggleModal: () => void;
-  address?: IAddressUser;
+  address?: IAddressUserNew;
   isMapEditing?: boolean;
   typeUse: "add" | "edit";
 }
@@ -23,20 +23,28 @@ const AddEditAddress = ({
   isMapEditing = false,
   typeUse,
 }: IProps) => {
-  const { addressName, number, unit, postalCode, phoneNo, longAndLat } =
-    address || {};
+  const {
+    contactNumber,
+    // detail,
+    id,
+    latAndLong,
+    name,
+    plaque,
+    postalCode,
+    unit,
+  } = address || {};
   const [position, setPosition] = useState<string | null>(null);
   const [personInfo, setPersonInfo] = useState({
-    number: number || "",
+    plaque: plaque || "",
     unit: unit || "",
     postalCode: postalCode || "",
-    addressName: addressName || "",
-    phoneNo: phoneNo || "",
+    name: name || "",
+    contactNumber: contactNumber || "",
   });
   const [lat, lng] = position
     ? position.split(",")
-    : longAndLat
-    ? longAndLat.split(",")
+    : latAndLong
+    ? latAndLong.split(",")
     : [undefined, undefined];
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,21 +53,25 @@ const AddEditAddress = ({
       [event.target.name]: event.target.value,
     });
   };
+
+  const { addressData } = useReverseGeocoding(Number(lat), Number(lng));
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       const url =
         typeUse === "edit"
-          ? `/panel/accounts/address/update/${accountId}/${addressName}`
-          : `/panel/accounts/address/add/${accountId}`;
+          ? `/v1/admins/address/${accountId}/${id}`
+          : `/v1/admins/address/${accountId}`;
 
       const method = typeUse === "edit" ? axiosPrivate.put : axiosPrivate.post;
 
       const res = await method(url, {
         ...personInfo,
-        longAndLat: `${lat},${lng}`,
+        plaque: Number(personInfo?.plaque),
+        detail: addressData?.formatted_address,
+        latAndLong: `${lat},${lng}`,
       });
-
       if (res.status === 200) {
         toast.success("اطلاعات با موفقیت ثبت شد");
         mutate();
@@ -70,37 +82,33 @@ const AddEditAddress = ({
     }
   };
 
-  const { addressData } = useReverseGeocoding(Number(lat), Number(lng));
-
-  console.log(addressData);
-
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="flex flex-col items-start justify-between w-full">
           <TextField
-            id="addressName"
+            id="name"
             placeholder="نام آدرس"
             label="نام آدرس"
             onChange={handleChange}
-            state={personInfo.addressName}
+            state={personInfo.name}
             // disabled={isMapEditing}
           />
 
           <TextField
-            id="number"
+            id="plaque"
             placeholder="پلاک"
             label="پلاک"
             onChange={handleChange}
-            state={personInfo.number.toString()}
+            state={personInfo.plaque.toString()}
           />
 
           <TextField
-            id="phoneNo"
+            id="contactNumber"
             placeholder="شماره تماس"
             label="شماره تماس"
             onChange={handleChange}
-            state={personInfo.phoneNo}
+            state={personInfo.contactNumber}
           />
           <TextField
             id="postalCode"

@@ -3,17 +3,17 @@ import { KeyedMutator } from "swr";
 import UserAddress from "./UserAddress";
 
 interface IProps {
-  data: ResponseDataNoPagination<IAddressUser>;
-  mutate: KeyedMutator<ResponseDataNoPagination<IAddressUser>>;
+  data: IAddressUserNew[];
+  mutate: KeyedMutator<IAddressUserNew[]>;
   accountId?: string;
 }
 
 const ListAddress = ({ data, mutate, accountId }: IProps) => {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 w-full">
-      {data.body.map((address) => (
+      {data.map((address) => (
         <div
-          key={address.addressName}
+          key={address.name}
           className="w-full p-1  rounded shadow-md bg-slate-50 dark:bg-slate-700"
         >
           <UserAddress

@@ -95,7 +95,7 @@ const TableContent = ({ selectedOption }: IProps) => {
                   >
                     کد ملی
                   </th>
-                  {selectedOptionValue === "registered" && (
+                  {selectedOptionValue === "4" && (
                     <th
                       scope="col"
                       className="px-6 py-3 text-xs font-medium tracking-wider text-center uppercase text-slate-700 dark:text-slate-300"
@@ -164,7 +164,7 @@ const TableContent = ({ selectedOption }: IProps) => {
                                 {/* {national_code || "-"} */}
                               </div>
                             </td>
-                            {selectedOptionValue === "registered" && (
+                            {selectedOptionValue === "4" && (
                               <td className="px-6 py-4 text-center whitespace-nowrap flex gap-2 justify-center">
                                 <div className="text-sm text-slate-700 dark:text-slate-300">
                                   <button

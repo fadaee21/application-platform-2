@@ -4,21 +4,18 @@ import { LoadingSpinnerTable } from "../ui-kit/LoadingSpinner";
 import { Popover } from "@headlessui/react";
 
 interface IData {
-  timestamp: string;
-  body: {
-    ibans: string[];
-  };
-  is_successful: boolean;
+  iban: string[] | [];
 }
 
 const ModalSheba = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const { data, isLoading } = useSWR<IData>(
-    id ? `/panel/accounts/get/ibans/${id}` : null
+    // id ? `/panel/accounts/get/ibans/${id}` : null
+    id ? `/v1/admins/user/${id}/iban` : null
   );
   if (!id) return <></>;
-  const ibans = data?.body.ibans || [];
+  const ibans = data?.iban || [];
   if (isLoading) {
     return <LoadingSpinnerTable />;
   }
