@@ -7,24 +7,21 @@ const useRefreshToken = () => {
   const { setAuth } = useAuth();
 
   const refresh = useCallback(async () => {
-    try {
-      const refreshToken = Cookies.get("refreshToken");
-      if (!refreshToken) throw new Error("No refresh token available");
+    const refreshToken = Cookies.get("refreshToken");
+    if (!refreshToken) return Promise.reject(new Error("No refresh token available"));
 
-      const headersList = {
+    const reqOptions = {
+      url: "/v1/oauth/connect/refresh",
+      method: "POST",
+      headers: {
         "refresh-token": refreshToken,
-        Authorization: "Bearer test_access_token", // FIXME: it must be remove
-      };
+      },
+    };
 
-      const reqOptions = {
-        url: "/v1/oauth/connect/refresh",
-        method: "POST",
-        headers: headersList,
-      };
+    try {
+      const response = await axiosInstance.request<{ accessToken: string; refreshToken: string }>(reqOptions);
+      const { accessToken } = response.data;
 
-      const response: { data: { accessToken: string; refreshToken: string } } =
-        await axiosInstance.request(reqOptions);
-      const accessToken = response.data.accessToken; // Ensure this matches the response structure
       Cookies.set("refreshToken", response.data.refreshToken, {
         path: "/",
         expires: 0.5,

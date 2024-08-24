@@ -4,7 +4,7 @@ import useFetcherPost from "@/hooks/useFetcherPost";
 import router from "@/routes";
 import { useState } from "react";
 import useSWR from "swr";
-import { LoadingSpinnerButton } from "@/components/ui-kit/LoadingSpinner";
+import {  LoadingSpinnerPage } from "@/components/ui-kit/LoadingSpinner";
 import Plus from "@/assets/icons/plus.svg?react";
 
 const Categories = () => {
@@ -32,10 +32,7 @@ const Categories = () => {
 
   if (isLoading) {
     return (
-      <div className="grid place-content-center w-full h-96">
-        <LoadingSpinnerButton />
-        <p>در حال بارگذاری...</p>
-      </div>
+        <LoadingSpinnerPage />
     );
   }
 

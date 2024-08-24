@@ -259,17 +259,7 @@ interface ITagSearchResponseList {
   tagSearchResponseList: ITagSearchResponse[];
 }
 
-interface ICategorySearchResponse {
-  id: string;
-  name: string;
-  description: string;
-  images: string[];
-  tags: string[];
-}
 
-interface ICategorySearchResponseList {
-  categorySearchResponseList: ICategorySearchResponse[];
-}
 
 interface CategorySearchResponseList {
   categorySearchResponseList: ICategorySearchResponse[]
