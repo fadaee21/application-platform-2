@@ -1,46 +1,52 @@
-import { LoadingSpinnerTable } from "@/components/ui-kit/LoadingSpinner";
-import Pagination from "@/components/ui-kit/Pagination";
+import { useMemo, useState } from "react";
+import ProductsListStructure from "./productsListStructure";
 import useFetcherPost from "@/hooks/useFetcherPost";
-import { useState } from "react";
 import useSWR from "swr";
-const ActivateProduct = ({ pageSize }: { pageSize: number }) => {
+import Pagination from "@/components/ui-kit/Pagination";
+import { LoadingSpinnerTable } from "@/components/ui-kit/LoadingSpinner";
+const AllProducts = ({ pageSize }: { pageSize: number }) => {
   const [page, setPage] = useState(1);
   const fetcherPost = useFetcherPost();
+
   const fetchUrl = `/v1/admins/product/search?page=${
     page - 1
-  }&size=${pageSize}&forceFirstAndLastRels=true`;
+  }&size=${pageSize}&forceFirstAndLastRels=true&status=1`;
 
   const { data: productData, isLoading: productIsLoading } = useSWR<
-    RootResponseNew<ICategorySearchResponseList>
+    RootResponseNew<ProductSearchResponseList>
   >(fetchUrl, {
     fetcher: () =>
       fetcherPost<
         { id: string | null; name: string | null; status: number | null },
-        RootResponseNew<ICategorySearchResponseList>
+        RootResponseNew<ProductSearchResponseList>
       >(fetchUrl, {
         arg: {
           name: null,
-          status: 1, //1 for active
+          status: 1,
           id: null,
         },
       }),
   });
 
-  if (productIsLoading) return <LoadingSpinnerTable />;
+  const products = useMemo(
+    () => productData?._embedded?.productSearchResponseList || [],
+    [productData]
+  );
 
-  console.log(productData);
+  if (productIsLoading) return <LoadingSpinnerTable />;
+  if (products.length === 0) return <h1>هیچ محصولی وجود ندارد</h1>;
 
   return (
     <>
-      <h1>ActivateProduct</h1>
+      <ProductsListStructure res={products} />
       <Pagination
         currentPage={page}
         onPageChange={(value) => setPage(value)}
         pageSize={pageSize}
-        totalCount={productData?.page.totalPages || 0}
+        totalCount={productData?.page.totalElements || 0}
       />
     </>
   );
 };
 
-export default ActivateProduct;
+export default AllProducts;

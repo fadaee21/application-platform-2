@@ -11,9 +11,10 @@ function handleError(error: unknown) {
     toast.error(err?.[0]);
     console.log("Validation Error:", err);
   } else if (axios.isAxiosError(error)) {
-    const errResMsg = error.response?.data.body.message;
-    console.log(errResMsg, "asasasasas");
-    toast.error(errResMsg || error.message);
+    //TODO: for this block you need the backend to handle errors properly
+    // const errResMsg = error.response?.data.body.message;
+    // toast.error(errResMsg || error.message);
+    toast.error("خطایی رخ داد. لطفاً دوباره تلاش کنید.");
     console.log("Axios Error:", error);
   } else {
     toast.error("خطایی رخ داد. لطفاً دوباره تلاش کنید.");

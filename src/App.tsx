@@ -15,10 +15,8 @@ function App() {
         onErrorRetry(error, _key, _config, revalidate, { retryCount }) {
           if (error.response.status === 401) {
             setTimeout(() => {
-              revalidate({
-                retryCount: 2,
-              });
-            }, 500);
+              revalidate();
+            }, 2000);
           }
           if (retryCount > 4) return;
         },

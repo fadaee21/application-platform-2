@@ -29,7 +29,7 @@ const Badge: React.FC<BadgeProps> = ({ color, text }) => {
 
   return (
     <span
-      className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${colorClasses[color]}`}
+      className={`inline-flex whitespace-nowrap items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${colorClasses[color]}`}
     >
       {text}
     </span>

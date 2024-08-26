@@ -46,10 +46,11 @@ const AddProducts = () => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.stopPropagation();
+    e.preventDefault();
     setDiscountType((prevState) => (prevState === 0 ? 1 : 0));
   };
   const tagIds = selectedTags?.map((tag) => tag.value).join(",");
-  const url = `/v1/admins/product?name=${productState.name}&description=${productState.description}&price=${productState.price}&discountPrice=${productState.discountPrice}&discountType=${discountType}&length=${productState.length}&width=${productState.width}&height=${productState.height}&weight=${productState.weight}&status=${productState.isActive}&count=0&thresholdCount=0&categoryId=${selectedCategory?.value}&tagIds=${tagIds}`;
+  const url = `/v1/admins/product?name=${productState.name}&description=${productState.description}&price=${productState.price}&discountPrice=${productState.discountPrice}&discountType=${discountType}&length=${productState.length}&width=${productState.width}&height=${productState.height}&weight=${productState.weight}&status=${productState.isActive}&count=0&thresholdCount=0&categoryId=${selectedCategory?.value}&tagIds=${tagIds}&thresholdAlert=true&visibility=true`;
   // const url =`/v1/admins/product?name=نام محصول&description=testetstestest&price=154874&discountPrice=20&discountType=0&length=100&width=100&height=100&weight=100&status=1&count=0&thresholdCount=0&categoryId=9530ba1c-52fd-4e27-8835-504913f992e6&tagIds=27243132-fcd8-4c49-a403-9f1669e3afc7`
   const fetcherPost = useFetcherPost({
     headers: { "Content-Type": "multipart/form-data" },
@@ -88,7 +89,10 @@ const AddProducts = () => {
       <div className="flex flex-col gap-5">
         <div className="w-full flex gap-4 items-center justify-start">
           <h6 className="ml-auto text-xl">اضافه کردن محصول جدید</h6>
-          <OutlineButton onClick={() => router.navigate("/superuser/product")}>
+          <OutlineButton
+            type="reset"
+            onClick={() => router.navigate("/superuser/product")}
+          >
             انصراف
           </OutlineButton>
           <PrimaryButtons type="submit" disabled={isDisableSubmit}>

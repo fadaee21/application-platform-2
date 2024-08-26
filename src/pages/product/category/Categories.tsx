@@ -4,7 +4,7 @@ import useFetcherPost from "@/hooks/useFetcherPost";
 import router from "@/routes";
 import { useState } from "react";
 import useSWR from "swr";
-import {  LoadingSpinnerPage } from "@/components/ui-kit/LoadingSpinner";
+import { LoadingSpinnerPage } from "@/components/ui-kit/LoadingSpinner";
 import Plus from "@/assets/icons/plus.svg?react";
 
 const Categories = () => {
@@ -18,10 +18,10 @@ const Categories = () => {
   }&size=${PAGE_SIZE}`;
 
   const { data, isLoading } = useSWR<
-    RootResponseNew<CategorySearchResponseList>
+    RootResponseNew<ICategorySearchResponseList>
   >(fetchUrl, {
     fetcher: () =>
-      fetcherPost<object, RootResponseNew<CategorySearchResponseList>>(
+      fetcherPost<object, RootResponseNew<ICategorySearchResponseList>>(
         fetchUrl,
         {
           arg: {},
@@ -31,9 +31,7 @@ const Categories = () => {
   const totalElements = data?.page.totalElements || 0;
 
   if (isLoading) {
-    return (
-        <LoadingSpinnerPage />
-    );
+    return <LoadingSpinnerPage />;
   }
 
   const categories = data?._embedded.categorySearchResponseList || [];
@@ -74,14 +72,16 @@ const Categories = () => {
 
             {category.tags && category.tags.length > 0 && (
               <div className="flex gap-2 flex-wrap mt-2">
-                {category.tags.map((tag: string, index: number) => (
-                  <span
-                    key={index}
-                    className="bg-blue-100 text-blue-500 px-2 py-1 rounded-full text-xs"
-                  >
-                    {tag}
-                  </span>
-                ))}
+                {category.tags.map((tag) => {
+                  return (
+                    <span
+                      key={tag.id}
+                      className="bg-blue-100 text-blue-500 px-2 py-1 rounded-full text-xs"
+                    >
+                      {tag.name}
+                    </span>
+                  );
+                })}
               </div>
             )}
           </div>

@@ -113,7 +113,7 @@ export default function ListBoxSelectMultiple({
                 selected.map((person) => (
                   <div
                     key={person.value}
-                    className="flex items-center gap-1 bg-gray-700 rounded px-2 py-1"
+                    className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded px-2 py-1"
                   >
                     {person.label}
                     <XMark

@@ -247,7 +247,6 @@ interface IAddressUserNew {
   detail: string;
 }
 
-
 interface ITagSearchResponse {
   id: string;
   name: string;
@@ -259,16 +258,44 @@ interface ITagSearchResponseList {
   tagSearchResponseList: ITagSearchResponse[];
 }
 
-
-
-interface CategorySearchResponseList {
-  categorySearchResponseList: ICategorySearchResponse[]
+interface ICategorySearchResponseList {
+  categorySearchResponseList: ICategorySearchResponse[];
 }
 
 interface ICategorySearchResponse {
-  id: string
-  name: string
-  description: string
-  images: string[]
-  tags: string[]
+  id: string;
+  name: string;
+  description: string;
+  images: string[];
+  tags: { id: string; name: string }[];
+}
+
+interface ProductSearchResponseList {
+  productSearchResponseList: ProductSearchResponse[];
+}
+
+interface ProductSearchResponse {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  discountPrice: number;
+  discountType: number;
+  length: number;
+  width: number;
+  height: number;
+  weight: number;
+  status: number;
+  count: number;
+  thresholdCount: number;
+  categories: {
+    id: string;
+    name: string;
+  }[];
+  images: string[];
+  tags: {
+    id: string;
+    name: string;
+  }[];
+  additional: unknown[];
 }
