@@ -21,3 +21,6 @@ export const LoadingSpinnerButton = () => {
     </div>
   );
 };
+export const LoadingPulsImage = () => {
+  return <div className="w-full h-full bg-slate-300  animate-pulse" />;
+};
